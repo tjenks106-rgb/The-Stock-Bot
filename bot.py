@@ -11,6 +11,13 @@ TOKEN = os.getenv("TOKEN")
 
 GUILD_ID = 1504537814312685640
 
+# =========================
+# STOCK CONFIG (NEW)
+# =========================
+
+STOCK_CHANNEL_ID = 1504575488834670743  # <-- CHANGE THIS TO YOUR STOCK CHANNEL
+STOCK_MESSAGE_ID = 1505344381509697740  # will auto-create or reuse message
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
@@ -38,13 +45,67 @@ stock = load_stock()
 ALLOWED_ROLES = ["Staff", "Moderator", "Bot Developer"]
 
 def has_permission(member: discord.Member):
-    # Server owner always allowed
     if member.guild.owner_id == member.id:
         return True
 
-    # Role-based access
     user_roles = [role.name for role in member.roles]
     return any(role in user_roles for role in ALLOWED_ROLES)
+
+# =========================
+# STOCK MESSAGE UPDATER (NEW)
+# =========================
+
+async def update_stock_message():
+    global STOCK_MESSAGE_ID
+
+    channel = bot.get_channel(STOCK_CHANNEL_ID)
+    if not channel:
+        return
+
+    embed = discord.Embed(
+        title="🔥 Current Stock",
+        color=0x39ff14
+    )
+
+    emoji_map = {
+        "vehicles": "🚗",
+        "tractors": "🚜",
+        "harvesters": "🌾",
+        "trailers": "🚛",
+        "plows": "🛠️",
+        "cultivators": "⚙️",
+        "seeders": "🌱",
+        "packs": "📦"
+    }
+
+    for category, items in stock.items():
+        emoji = emoji_map.get(category, "📁")
+
+        if len(items) == 0:
+            value = "❌ Out of Stock"
+        else:
+            value = "\n".join(items)
+
+        embed.add_field(
+            name=f"{emoji} {category.capitalize()}",
+            value=value,
+            inline=False
+        )
+
+    embed.set_footer(text="Limited • Premium • Event Vehicles")
+
+    # edit existing message if it exists
+    if STOCK_MESSAGE_ID:
+        try:
+            msg = await channel.fetch_message(STOCK_MESSAGE_ID)
+            await msg.edit(embed=embed)
+            return
+        except:
+            pass
+
+    # create new message if none exists
+    msg = await channel.send(embed=embed)
+    STOCK_MESSAGE_ID = msg.id
 
 # =========================
 # BOT READY
@@ -63,6 +124,7 @@ async def on_ready():
 
 # =========================
 # STOCK VIEW COMMAND
+# (unchanged - optional use)
 # =========================
 
 @bot.tree.command(
@@ -139,6 +201,8 @@ async def addstock(interaction: discord.Interaction, category: str, item: str):
     stock[category].append(item)
     save_stock(stock)
 
+    await update_stock_message()
+
     await interaction.response.send_message(
         f"✅ Added **{item}** to **{category}**."
     )
@@ -179,6 +243,8 @@ async def removestock(interaction: discord.Interaction, category: str, item: str
         stock[category].remove(item)
         save_stock(stock)
 
+        await update_stock_message()
+
         await interaction.response.send_message(
             f"❌ Removed **{item}** from **{category}**."
         )
@@ -215,6 +281,8 @@ async def clearstock(interaction: discord.Interaction):
         stock[category] = []
 
     save_stock(stock)
+
+    await update_stock_message()
 
     await interaction.response.send_message(
         "🗑️ All stock cleared."
