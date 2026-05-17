@@ -10,7 +10,6 @@ import os
 TOKEN = os.getenv("TOKEN")
 
 STOCK_CHANNEL_ID = 1504575488834670743
-
 STOCK_MESSAGE_ID = None
 
 # =========================
@@ -53,12 +52,10 @@ catalog = load_catalog()
 # =========================
 
 def get_category(item_name: str):
-
     for cat, items in catalog.items():
         for item in items:
             if item["name"] == item_name:
                 return cat
-
     return None
 
 # =========================
@@ -72,23 +69,11 @@ def build_embed():
         color=0x39ff14
     )
 
-    emoji = {
-        "vehicles":"🚗",
-        "tractors":"🚜",
-        "harvesters":"🌾",
-        "trailers":"🚛",
-        "plows":"🛠️",
-        "cultivators":"⚙️",
-        "seeders":"🌱",
-        "packs":"📦"
-    }
-
     if not stock:
         embed.description = "No stock available"
         return embed
 
     for name, qty in stock.items():
-
         if qty <= 0:
             continue
 
@@ -126,7 +111,7 @@ async def update_stock():
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# PANEL
+# PANEL (FIXED)
 # =========================
 
 class StockPanel(discord.ui.View):
@@ -134,16 +119,26 @@ class StockPanel(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="➕ Add Stock", style=discord.ButtonStyle.success)
+    @discord.ui.button(
+        label="➕ Add Stock",
+        style=discord.ButtonStyle.success,
+        custom_id="stockpanel_add"
+    )
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
+
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("add"),
             ephemeral=True
         )
 
-    @discord.ui.button(label="➖ Remove Stock", style=discord.ButtonStyle.danger)
+    @discord.ui.button(
+        label="➖ Remove Stock",
+        style=discord.ButtonStyle.danger,
+        custom_id="stockpanel_remove"
+    )
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
+
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("remove"),
@@ -176,7 +171,6 @@ class CategoryDropdown(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
 
         category = self.values[0]
-
         items = catalog.get(category, [])
 
         options = [
@@ -210,27 +204,21 @@ class ItemSelect(discord.ui.View):
 class ItemDropdown(discord.ui.Select):
 
     def __init__(self, options, action):
-
         super().__init__(
             placeholder="Select item",
             options=options
         )
-
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
 
         item = self.values[0]
 
-        # =========================
-        # ADD STOCK (QUANTITY SYSTEM)
-        # =========================
+        # ADD STOCK
         if self.action == "add":
             stock[item] = stock.get(item, 0) + 1
 
-        # =========================
         # REMOVE STOCK
-        # =========================
         else:
             if item in stock:
                 stock[item] -= 1
@@ -252,7 +240,10 @@ class ItemDropdown(discord.ui.Select):
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
+
     await update_stock()
+
+    # REQUIRED for persistent view buttons
     bot.add_view(StockPanel())
 
 # =========================
