@@ -54,9 +54,20 @@ catalog = load_catalog()
 def get_price(item_name: str):
     for category, items in catalog.items():
         for item in items:
-            if item.get("name") == item_name:
+            if item["name"] == item_name:
                 return item.get("price", "N/A")
     return "N/A"
+
+# =========================
+# CATEGORY LOOKUP
+# =========================
+
+def get_category(item_name: str):
+    for cat, items in catalog.items():
+        for item in items:
+            if item["name"] == item_name:
+                return cat
+    return None
 
 # =========================
 # EMBED
@@ -113,7 +124,7 @@ async def update_stock():
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# BULK MODAL
+# BULK SYSTEM (MODAL)
 # =========================
 
 class QuantityModal(discord.ui.Modal):
@@ -177,7 +188,6 @@ class StockPanel(discord.ui.View):
         custom_id="stockpanel_add"
     )
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
-
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("add"),
@@ -190,7 +200,6 @@ class StockPanel(discord.ui.View):
         custom_id="stockpanel_remove"
     )
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
-
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("remove"),
@@ -198,7 +207,7 @@ class StockPanel(discord.ui.View):
         )
 
 # =========================
-# CATEGORY SELECT
+# CATEGORY SELECT (FIXED FILTERING)
 # =========================
 
 class CategorySelect(discord.ui.View):
@@ -207,12 +216,30 @@ class CategorySelect(discord.ui.View):
         super().__init__(timeout=60)
         self.action = action
 
-        options = [
-            discord.SelectOption(label=c.capitalize(), value=c)
-            for c in catalog.keys()
-        ]
+        # ONLY show categories that actually have stock > 0
+        options = []
+
+        for category, items in catalog.items():
+            has_stock = any(stock.get(i["name"], 0) > 0 for i in items)
+
+            if has_stock:
+                options.append(
+                    discord.SelectOption(
+                        label=category.capitalize(),
+                        value=category
+                    )
+                )
+
+        if not options:
+            options = [
+                discord.SelectOption(
+                    label="No stocked categories",
+                    value="none"
+                )
+            ]
 
         self.add_item(CategoryDropdown(options, action))
+
 
 class CategoryDropdown(discord.ui.Select):
 
@@ -221,35 +248,26 @@ class CategoryDropdown(discord.ui.Select):
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
-        try:
-            await interaction.response.defer(ephemeral=True)
 
-            category = self.values[0]
-            items = catalog.get(category, [])
-
-            options = [
-                discord.SelectOption(label=i["name"], value=i["name"])
-                for i in items if i.get("name")
-            ][:25]
-
-            if not options:
-                return await interaction.followup.send(
-                    "❌ No items in this category",
-                    ephemeral=True
-                )
-
-            await interaction.followup.send(
-                "Select item:",
-                view=ItemSelect(options, self.action),
+        if self.values[0] == "none":
+            return await interaction.response.send_message(
+                "❌ No categories currently have stock.",
                 ephemeral=True
             )
 
-        except Exception as e:
-            print("CategoryDropdown ERROR:", e)
-            await interaction.followup.send(
-                "❌ Something went wrong.",
-                ephemeral=True
-            )
+        category = self.values[0]
+        items = catalog.get(category, [])
+
+        options = [
+            discord.SelectOption(label=i["name"], value=i["name"])
+            for i in items[:25]
+        ]
+
+        await interaction.response.send_message(
+            "Select item:",
+            view=ItemSelect(options, self.action),
+            ephemeral=True
+        )
 
 # =========================
 # ITEM SELECT
@@ -265,26 +283,14 @@ class ItemSelect(discord.ui.View):
 class ItemDropdown(discord.ui.Select):
 
     def __init__(self, options, action):
-        super().__init__(
-            placeholder="Select item",
-            options=options
-        )
+        super().__init__(placeholder="Select item", options=options)
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
-        try:
-            item = self.values[0]
-
-            await interaction.response.send_modal(
-                QuantityModal(item, self.action)
-            )
-
-        except Exception as e:
-            print("ItemDropdown ERROR:", e)
-            await interaction.response.send_message(
-                "❌ Something went wrong selecting item.",
-                ephemeral=True
-            )
+        item = self.values[0]
+        await interaction.response.send_modal(
+            QuantityModal(item, self.action)
+        )
 
 # =========================
 # READY EVENT
