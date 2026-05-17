@@ -152,17 +152,22 @@ async def on_ready():
     await send_or_update_stock_panel()
     await send_or_update_admin_panel()
 
-    # 🔥 CRITICAL FIX: register persistent view
+    # 🔥 FIX: register persistent view
     bot.add_view(StockPanel())
+
 # =========================
-# BUTTON PANEL
+# STOCK PANEL
 # =========================
 
 class StockPanel(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="➕ Add Stock", style=discord.ButtonStyle.success)
+    @discord.ui.button(
+        label="➕ Add Stock",
+        style=discord.ButtonStyle.success,
+        custom_id="add_stock_btn"
+    )
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
 
         if interaction.channel.id != ADMIN_CHANNEL_ID:
@@ -179,7 +184,11 @@ class StockPanel(discord.ui.View):
             ephemeral=True
         )
 
-    @discord.ui.button(label="➖ Remove Stock", style=discord.ButtonStyle.danger)
+    @discord.ui.button(
+        label="➖ Remove Stock",
+        style=discord.ButtonStyle.danger,
+        custom_id="remove_stock_btn"
+    )
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
 
         if interaction.channel.id != ADMIN_CHANNEL_ID:
@@ -197,7 +206,7 @@ class StockPanel(discord.ui.View):
         )
 
 # =========================
-# CATEGORY SELECT
+# CATEGORY SELECT (FIXED SAFE)
 # =========================
 
 class CategorySelect(discord.ui.View):
@@ -207,9 +216,11 @@ class CategorySelect(discord.ui.View):
 
         options = [
             discord.SelectOption(label=cat, value=cat)
-            for cat, items in stock.items()
-            if items
+            for cat in stock.keys()
         ]
+
+        if not options:
+            options = [discord.SelectOption(label="No categories", value="none")]
 
         self.add_item(CategoryDropdown(options, action))
 
@@ -230,7 +241,7 @@ class CategoryDropdown(discord.ui.Select):
         )
 
 # =========================
-# VEHICLE SELECT
+# VEHICLE SELECT (FIXED SAFE)
 # =========================
 
 class VehicleSelect(discord.ui.View):
@@ -241,8 +252,11 @@ class VehicleSelect(discord.ui.View):
 
         options = [
             discord.SelectOption(label=v, value=v)
-            for v in stock[category]
+            for v in stock.get(category, [])
         ]
+
+        if not options:
+            options = [discord.SelectOption(label="No vehicles", value="none")]
 
         self.add_item(VehicleDropdown(options, category, action))
 
@@ -255,6 +269,9 @@ class VehicleDropdown(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
         vehicle = self.values[0]
         cat = self.category
+
+        if vehicle == "none":
+            return await interaction.response.send_message("❌ Nothing available.", ephemeral=True)
 
         if self.action == "add":
             if vehicle not in stock[cat]:
