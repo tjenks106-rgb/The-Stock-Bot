@@ -1,0 +1,353 @@
+{
+  "vehicles": [
+    {
+      "name": "Sled",
+      "price": "9b",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/screenshot-2025-05-14-192118-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "R500",
+      "price": "350m",
+      "image": "https://media.discordapp.net/attachments/1403319372520362165/1470479176971718728/lBJaZAAAABklEQVQDAH11uHuWxjWQAAAAAElFTkSuQmCC.png?ex=6a0b5373&is=6a0a01f3&hm=d08c07dae3c567c4c98e249a280f56b7b17d96cab5934c2a5f438ce27df6c6f4&format=webp&quality=lossless&width=1124&height=615&"
+    },
+    {
+      "name": "Cyber Semi",
+      "price": "100m",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/cyber-semi-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "Cybertruck",
+      "price": "100m",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/cybertruck-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "Vintage Semi",
+      "price": "85m",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/vintage-semi-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "Titan X",
+      "price": "50m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1477414293715550279/image.png?ex=6a0ad908&is=6a098788&hm=d818d24d73e7b57f86740900713b2f3cf21975021e850ce9e08202da976af026&format=webp&quality=lossless&width=953&height=677&"
+    },
+    {
+      "name": "Titan",
+      "price": "40m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1477414292956516463/wAAAAZJREFUAwDVWDs2Nk8nbAAAAABJRU5ErkJggg.png?ex=6a0ad908&is=6a098788&hm=71d1d6f08462c2978af7d871765d0c47e54d38559e8202a137bd131190a0b37b&format=webp&quality=lossless&width=1192&height=677&"
+    },
+    {
+      "name": "Kei Pickup",
+      "price": "32m",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/kei-pickup-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "Marley Pickup",
+      "price": "30m",
+      "image": "https://media.discordapp.net/attachments/1403319372520362165/1470496200531640442/1rDCPwAAAAZJREFUAwBdB2SUfLlTagAAAABJRU5ErkJggg.png?ex=6a0aba8e&is=6a09690e&hm=5d012581aa6c0b00fee0b403782166f304b8bd16b26b747104b9bc3fa6219cb9&format=webp&quality=lossless&width=844&height=614&"
+    },
+    {
+      "name": "Levi Flatbed",
+      "price": "30m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1473129109507932372/P1ID0AAAABklEQVQDAKYQm1wyLMDJAAAAAElFTkSuQmCC.png?ex=6a0b1425&is=6a09c2a5&hm=9192faca76a79fa021ddc67ca350cbacd522c8b51fdd849e91ac481537f2907c&format=webp&quality=lossless&width=1163&height=615&"
+    },
+    {
+      "name": "Train",
+      "price": "30m",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/image-high-kfk0t9.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "Foxx Metal Tech P1",
+      "price": "20m"
+    },
+    {
+      "name": "DG Semi",
+      "price": "15m",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/image-high-xeyz85.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "R350 SD",
+      "price": "14m",
+      "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/image-high-eocleh.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+    },
+    {
+      "name": "Solid Hauler 47",
+      "image": "https://media.discordapp.net/attachments/1403319372520362165/1470480289322237984/beHhSQAAAAZJREFUAwAOcFj9syIt8AAAAABJRU5ErkJggg.png?ex=6a0b547d&is=6a0a02fd&hm=24180d462c23832ec822a23c9dca45b46bce13f7760e30ae242058ec7dc5dc4a&format=webp&quality=lossless&width=1115&height=615&"
+    }
+  ],
+
+
+  "tractors": [
+    {
+      "name": "Sleigh",
+      "price": "9b",
+      "image": "https://images-ext-1.discordapp.net/external/c8DTilBQmFxx0JNniPQ_pk04AUHYPzgP8W7cRUC7KHs/%3Fenable-io%3Dtrue%26enable%3Dupscale%26crop%3D0.75%253A1%26width%3D1200/https/primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/image-high-lcgn5f.png?format=webp&quality=lossless&width=721&height=960"
+    },
+    {
+      "name": "Vertra 135",
+      "price": "1.4b",
+      "image": "https://media.discordapp.net/attachments/1331768097002225736/1470057986083782687/UkBLBAAAABklEQVQDAAh1gvnsOFlLAAAAAElFTkSuQmCC.png?ex=6a0b1cb0&is=6a09cb30&hm=6791fc7a449c71574cbf3e954f9a304c79a5b566987c8c6aba1dd57a47266047&format=webp&quality=lossless&width=831&height=615&"
+    },
+    {
+      "name": "Vintage Tractor",
+      "price": "285m",
+      "image": "https://media.discordapp.net/attachments/1331768097002225736/1470062048510607504/xbIbOAAAABklEQVQDAKC3QYehpvI5AAAAAElFTkSuQmCC.png?ex=6a0b2078&is=6a09cef8&hm=37926e120bb18395ffd442ef8c1f7713f54b3b147f9aa9a713cf582d079f6394&format=webp&quality=lossless&width=673&height=615&"
+    },
+    {
+      "name": "KM472",
+      "price": "80m",
+      "image": "https://media.discordapp.net/attachments/1331768097002225736/1470060732099067934/G9YFusnegAAAAASUVORK5CYII.png?ex=6a0b1f3e&is=6a09cdbe&hm=374d9408c978a57c06121d1966bd0bf0f3c6e1a3fae118bfd6d8e1a5c9e3b230&format=webp&quality=lossless&width=759&height=615&"
+    },
+    {
+      "name": "ROM2400",
+      "price": "25m",
+      "image": "https://media.discordapp.net/attachments/1458083329873285120/1500891770521911438/image.png?ex=6a0b3963&is=6a09e7e3&hm=221c08339c214e760ad77e877814449edf411ddbe11e57e491de851d3ed08b5e&format=webp&quality=lossless&width=977&height=550&"
+    },
+    {
+      "name": "Foxx Metal Tech X1",
+      "price": "22m"
+    },
+    {
+      "name": "Claas Xerion 5000",
+      "price": "16m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1473127372558569596/nfikAAAABklEQVQDAEGkzfMRW6svAAAAAElFTkSuQmCC.png?ex=6a0b1287&is=6a09c107&hm=a0e45f1684d9cecd42c2304a95aeb785955a7fa3ef99d82e32bcd0d3c9e3315b&format=webp&quality=lossless&width=564&height=385&"
+    }
+  ],
+"harvesters": [
+  {
+    "name": "NA CR10",
+    "price": "1.2b",
+    "image": "https://media.discordapp.net/attachments/1440136877544968212/1472069535799709770/sTlqegAAAAZJREFUAwDANRz5wJm19gAAAABJRU5ErkJggg.png?ex=6a0b2dd7&is=6a09dc57&hm=580ce9ff408fac7cdb245aeb9f8f39e27fb55ad04895d07127632127a11cf954&format=webp&quality=lossless&width=703&height=614&"
+  },
+  {
+    "name": "Vintage Harvester",
+    "price": "900m",
+    "image": "https://media.discordapp.net/attachments/1403319372520362165/1470505820125925498/W1AEYAAAAAZJREFUAwDvYTmF4j1hAgAAAABJRU5ErkJggg.png?ex=6a0ac384&is=6a097204&hm=1efa6a34963cf9e6a8791b3a65df6633b2b49d32e124499586c7faf71a935e31&format=webp&quality=lossless&width=734&height=614&"
+  },
+  {
+    "name": "ActiveS7",
+    "price": "110m",
+    "image": "https://media.discordapp.net/attachments/1403319372520362165/1470506116415754397/1CrUscAAAAGSURBVAMAtflpo907vyUAAAAASUVORK5CYII.png?ex=6a0ac3ca&is=6a09724a&hm=365498e34e9fcf9649b42465269dedd98a0753d189587223251e7641f6eecce4&format=webp&quality=lossless&width=778&height=614&"
+  },
+  {
+    "name": "Mega Baler",
+    "price": "40m",
+    "image": "https://media.discordapp.net/attachments/1458083379097374804/1477449968720548045/image.png?ex=6a0afa42&is=6a09a8c2&hm=1975dd810c6c532f373f8313d6c0f5ed2d722890fd9af4273cefd00e57bcf7dc&format=webp&quality=lossless&width=788&height=472&"
+  },
+  {
+    "name": "Claas 790",
+    "price": "20m",
+    "image": "https://media.discordapp.net/attachments/1403319372520362165/1470505968126394491/8aQHpgAAAAZJREFUAwAyCYcVo6KrAAAAABJRU5ErkJggg.png?ex=6a0ac3a7&is=6a097227&hm=0aaf7f8c8a3dc172aabc69fec2c6118789f1fb95a169e297553de00ea99c4dfc&format=webp&quality=lossless&width=848&height=614&"
+  }
+],
+
+
+"trailers_haulers": [
+  {
+    "name": "SL Medium",
+    "price": "7b",
+    "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/sl-medium-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+  },
+  {
+    "name": "Automatic Flatbed",
+    "price": "2b",
+    "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/screenshot-2026-03-01-192115-high.png?enable-io=true&crop=1.6824%3A1&width=347"
+  },
+  {
+    "name": "Euro Hauler 1280",
+    "price": "1.2b",
+    "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/euro-hauler-1280-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+  },
+  {
+    "name": "Solid Hauler 4700",
+    "price": "850m",
+    "image": "https://primary.jwwb.nl/public/v/g/u/temp-byftwzqxchotobbivick/solid-hauler-4700-standard.png?enable-io=true&enable=upscale&crop=0.75%3A1&width=1200"
+  },
+  {
+    "name": "Insul Animal",
+    "price": "550m",
+    "image": "https://media.discordapp.net/attachments/1458083329873285120/1477424352537477151/92LkmRAAAABklEQVQDAIhLBSyt7w89AAAAAElFTkSuQmCC.png?ex=6a0ae266&is=6a0990e6&hm=791de80573433d48c69dec24958c8095091230b4c419a87a701cef2381758689&format=webp&quality=lossless&width=605&height=334&"
+  },
+  {
+    "name": "Pace IX CH",
+    "price": "155m",
+    "image": "https://media.discordapp.net/attachments/1403319372520362165/1473125589371326657/image.png?ex=6a0b10dd&is=6a09bf5d&hm=37ecd20f24bac298b9d87ced4231a0376c7d515e05bbd9424482df35803a4174&format=webp&quality=lossless&width=691&height=493&"
+  },
+  {
+    "name": "Pace IX LT",
+    "price": "155m",
+    "image": "https://media.discordapp.net/attachments/1440136877544968212/1473125211141443666/image.png?ex=6a0b1083&is=6a09bf03&hm=f58e6e37007ac11b124fa48569f84306df8b17fcf2c95278faebe3a618ff0170&format=webp&quality=lossless&width=886&height=562&"
+  },
+  {
+    "name": "Small Log Hauler",
+    "price": "130m",
+    "image": "https://cdn.discordapp.com/attachments/1440136877544968212/1472071257645125765/YMAmKgAAAAZJREFUAwChwhMSQ8hngAAAABJRU5ErkJggg.png?ex=6a0b2f71&is=6a09ddf1&hm=6bfb1fb7ea6b2e69f9ec8732bccaf1eaa26ddb3fee69d7ef6658d4b7c8ead820&"
+  },
+  {
+    "name": "Legendary Log Transport",
+    "price": "40m",
+    "image": "https://cdn.discordapp.com/attachments/1440136877544968212/1472072483271348347/pS9XGgAAAAZJREFUAwBknxdLEOToeQAAAABJRU5ErkJggg.png?ex=6a0b3095&is=6a09df15&hm=144c8d945a3372056d666cd2cdc058d51c0cb9a9091273a47dcc3db399fd797f&"
+  },
+  {
+    "name": "Titan LH",
+    "price": "40m",
+    "image": "https://media.discordapp.net/attachments/1458083379097374804/1477414292507594784/Bw0ECAAAABklEQVQDABtbZZywoDosAAAAAElFTkSuQmCC.png?ex=6a0ad908&is=6a098788&hm=2359285da6418b1f7229a740fb7b89b6a5198ded4cc135c809b84a88d3ee9ab4&format=webp&quality=lossless&width=1103&height=677&"
+  },
+  {
+    "name": "Titan CH",
+    "price": "40m",
+    "image": "https://media.discordapp.net/attachments/1458083379097374804/1477414293275410522/9qp6FSAAAABklEQVQDAMzBBrHwqOI7AAAAAElFTkSuQmCC.png?ex=6a0ad908&is=6a098788&hm=0944403d7a3d040c6af44f39f53384e723c15d14aacb970e900774f150a8cbe7&format=webp&quality=lossless&width=1125&height=675&"
+  }
+],
+
+
+ "plows": [
+    {
+      "name": "NSH",
+      "price": "50m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1474396002223132722/nRVPHgAAAAZJREFUAwARC3Jm60prbAAAAABJRU5ErkJggg.png?ex=6a0b12c7&is=6a09c147&hm=5d8d9fba91a69f9ddd3020be17387dfca22927dc4791cefeeb0931c21ba01106&format=webp&quality=lossless&width=1485&height=677&"
+    },
+    {
+      "name": "ZC3",
+      "price": "25m",
+      "image": "https://media.discordapp.net/attachments/1458083329873285120/1500891770127650979/Ssb7ggAAAAZJREFUAwA7xx5fKj3nsQAAAABJRU5ErkJggg.png?ex=6a0b3963&is=6a09e7e3&hm=138fbca6b60d045676213a5a8b17134c79d008bdd4b483428b6fc3648a57c03e&format=webp&quality=lossless&width=977&height=550&"
+    },
+    {
+      "name": "Maltex P680",
+      "price": "5m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1477445752644046972/FpnMNAAAABklEQVQDAMdo0VhSadiAAAAAElFTkSuQmCC.png?ex=6a0af655&is=6a09a4d5&hm=80f95c25b726c9c2f576dfc0851863a1ff3de23e420bc6efc482f81f80659bb0&format=webp&quality=lossless&width=598&height=675&"
+    }
+  ],
+
+
+  "cultivators": [
+    {
+      "name": "Swifter 180",
+      "price": "32m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1474396293592912055/AopAAAAAZJREFUAwAgVfLrbXWQxAAAAABJRU5ErkJggg.png?ex=6a0b130d&is=6a09c18d&hm=508940ed5677bb8ecbe82aeaa4b4cbb34760aa42bce5958deeedaf7548ea6f3c&format=webp&quality=lossless&width=1069&height=675&"
+    },
+    {
+      "name": "WRXL2",
+      "price": "25m",
+      "image": "https://media.discordapp.net/attachments/1458083329873285120/1500891770794278942/image.png?ex=6a0b3963&is=6a09e7e3&hm=532690793cc2665b3dce51a9409c75152b061a558b56f87b4d19a9cc528b2017&format=webp&quality=lossless&width=977&height=550&"
+    },
+    {
+      "name": "Foxx Chamber 105",
+      "price": "9m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1477446828512252086/NoUorAAAABklEQVQDAITc2LI8RBvhAAAAAElFTkSuQmCC.png?ex=6a0af755&is=6a09a5d5&hm=dbebc3785cd949a4845c18d9119151b440ca5bf559f7618124f36a5170a4bf79&format=webp&quality=lossless&width=909&height=677&"
+    },
+    {
+      "name": "LAT 360",
+      "price": "9m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1474406259334713484/FRAKUAAAAGSURBVAMA4VHOOiaqKsYAAAAASUVORK5CYII.png?ex=6a0b1c55&is=6a09cad5&hm=4b46b758d09b3f2fd91e0f61f0236624cb1c2ed3a47cff2e9988962a027e3cf5&format=webp&quality=lossless&width=1354&height=675&"
+    },
+    {
+      "name": "Maltex C4500 Global",
+      "price": "5m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1477445753025855519/8pxwmzAAAABklEQVQDADQFLbuzefaYAAAAAElFTkSuQmCC.png?ex=6a0af655&is=6a09a4d5&hm=6ba48be9b7ebd7d4fa301c96447756846f9ea960a61ac35873dd1ccee589d3aa&format=webp&quality=lossless&width=702&height=675&"
+    }
+  ],
+
+
+  "seeders": [
+    {
+      "name": "Zalter-S 270",
+      "price": "110m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1474395323446071377/3lOh2oAAAAGSURBVAMAdsVCnSOjAvsAAAAASUVORK5CYII.png?ex=6a0b1226&is=6a09c0a6&hm=115be86423f8563db67f2d64c7f5371c301a16f3c951f9114a14c69ce1a7d748&format=webp&quality=lossless&width=1038&height=675&"
+    },
+    {
+      "name": "Pronto9",
+      "price": "65m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1474396449755369556/ixnZZQAAAAZJREFUAwBwy52QdEfVQAAAAABJRU5ErkJggg.png?ex=6a0b1332&is=6a09c1b2&hm=a41ad32931fee64d543ceb85d38ddda6f0fb81f30c17c0d137bd2737a09e63e7&format=webp&quality=lossless&width=1034&height=675&"
+    },
+    {
+      "name": "GFS10",
+      "price": "25m",
+      "image": "https://media.discordapp.net/attachments/1458083329873285120/1500891769842171955/image.png?ex=6a0b3963&is=6a09e7e3&hm=cbeb988e32876db4e313e98d2bd7a16964421855fefe16b9186e6ff90bbfaf75&format=webp&quality=lossless&width=977&height=550&"
+    },
+    {
+      "name": "ATM 700",
+      "price": "7m",
+      "image": "https://media.discordapp.net/attachments/1403319372520362165/1470501859839049849/XWvhPAAAABklEQVQDAGOhedbWBrGKAAAAAElFTkSuQmCC.png?ex=6a0abfd3&is=6a096e53&hm=1d4670818bed9ea278f6cd17e8b629e55d4e8ba70a357845a8dfe6a7ebb69d87&format=webp&quality=lossless&width=967&height=615&"
+    },
+    {
+      "name": "EFC 8300 Drill",
+      "price": "5m",
+      "image": "https://media.discordapp.net/attachments/1458083379097374804/1477445753365331999/CaJUdgAAAAZJREFUAwBrxH4AfV9xiAAAAABJRU5ErkJggg.png?ex=6a0af655&is=6a09a4d5&hm=0f88dceaca48892b79239626354ec64c188f82344bc142675725b5db6cc070b0&format=webp&quality=lossless&width=1220&height=675&"
+    }
+  ],
+
+
+  "packs": [
+    {
+        "name": "Insul Pack",
+        "value": "550m",
+        "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051557116379256/screenshot-2025-12-17-171125-standard.png?ex=6a0b0bde&is=6a09ba5e&hm=8bc8c1994250c7c13e579706f156d038c1a2e2a55a866e71fdf6532e0e0eedb9&format=webp&quality=lossless&width=382&height=213&"
+    },
+    {
+        "name": "Pace IX Pack",
+        "value": "310m",
+        "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493051742303027230/screenshot-2025-12-17-171153-standard.png?ex=6a0b0c0a&is=6a09ba8a&hm=69627670d06042d9d19634ea89652c25ab32576969eebfc36a80f06490c44ab0&"
+    },
+    {
+        "name": "Christmas Vehicle Pack",
+        "value": "300m",
+        "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493052119379476671/screenshot-2025-12-17-171051-standard.png?ex=6a0b0c64&is=6a09bae4&hm=7aa32033e49e065321b283752bfd04d8c797a77cf0ba6a945104f9d41f7752ff&"
+    },
+    {
+        "name": "Titan Truck Pack",
+        "value": "250m",
+        "image": ""
+    },
+    {
+        "name": "Zalter Pack",
+        "value": "220m",
+        "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051680202162226/screenshot-2025-12-17-171100-standard.png?ex=6a0b0bfc&is=6a09ba7c&hm=8f38ff3ba5a8c0850e5519121afa6f6ae40f8ce6dd14bfbf7bd2209796f482cb&format=webp&quality=lossless&width=382&height=215&"
+    },
+    {
+        "name": "Cyber Pack",
+        "value": "210m",
+        "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051181071597800/screenshot-2025-12-17-171108-standard.png?ex=6a0b0b85&is=6a09ba05&hm=a54aeba1f88d1ef0a50923fc415948e6fe88753cbc5cc7e6ba6dc8a8a06cc5f2&format=webp&quality=lossless&width=382&height=217&"
+    },
+    {
+        "name": "Lumber Starter Pack",
+        "value": "130m",
+        "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493052212220268605/pasted-image-sun-mar-08-2026-17-47-13-gmt-0000-greenwich-mean-time-high.png?ex=6a0b0c7a&is=6a09bafa&hm=796b75c3755ed73a3984fe9ab90b0265c29e4995506c9251f0d57ebe31c0e6e3&"
+    },
+    {
+        "name": "Vintage Semi Pack",
+        "value": "120m",
+        "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051422059663470/screenshot-2025-12-17-171118-standard.png?ex=6a0b0bbe&is=6a09ba3e&hm=27a75090e4759e8c3dfd03f62436ccef2af5422ff41184f6485d4e5f9ff7019f&format=webp&quality=lossless&width=382&height=216&"
+    },
+    {
+        "name": "Kei Truck Pack",
+        "value": "120m",
+        "image": ""
+    },
+    {
+        "name": "1950's Truck Pack",
+        "value": "100m",
+        "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493051864105619486/screenshot-2025-12-17-171133-standard.png?ex=6a0b0c27&is=6a09baa7&hm=cf6202c555b856d8dd189bd8d44f72e334b29f94e67ed44b052cd73ce0d2a6a1&"
+    },
+    {
+        "name": "Marley Truck Pack",
+        "value": "86m",
+        "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493052050945216522/screenshot-2025-12-17-171140-standard.png?ex=6a0b0c54&is=6a09bad4&hm=61d2ea121746397ac3cfefdfa5d1f8ce1e34138c165666794ce64922b12b9269&"
+    },
+    {
+        "name": "Truck N' Trailers Pack",
+        "value": "40m",
+        "image": "https://media.discordapp.net/attachments/1458083379097374804/1493049800894054562/screenshot-2025-12-17-171231-standard.png?ex=6a0b0a3c&is=6a09b8bc&hm=328b95efad362a3b6b521c7464cc416dc8f48fa993f1be18a1aa7ccead5f9fd6&format=webp&quality=lossless&width=382&height=215&"
+    },
+    {
+        "name": "DG Semi Pack",
+        "value": "40m",
+        "image": "https://media.discordapp.net/attachments/1458083379097374804/1493049635923693709/screenshot-2025-12-17-171217-standard.png?ex=6a0b0a14&is=6a09b894&hm=799c3a33c2726723f7b814a8eea71511b056f0f3b1fb020c7d839b5ffdd989c0&format=webp&quality=lossless&width=382&height=216&"
+    },
+    {
+        "name": "Starter Pack",
+        "value": "30m",
+        "image": "https://media.discordapp.net/attachments/1458083379097374804/1493049446378770533/screenshot-2025-12-17-171224-standard.png?ex=6a0b09e7&is=6a09b867&hm=cd6ff07fdebc32869a4c9e241a345adf24bb744e5adb1a2638c942e8ad05bb89&format=webp&quality=lossless&width=382&height=215&"
+    }
+     ]
+    }
+
