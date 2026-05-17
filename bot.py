@@ -48,16 +48,14 @@ stock = load_stock()
 catalog = load_catalog()
 
 # =========================
-# PRICE LOOKUP (NEW)
+# PRICE LOOKUP
 # =========================
 
 def get_price(item_name: str):
-
     for category, items in catalog.items():
         for item in items:
             if item["name"] == item_name:
                 return item.get("price", "N/A")
-
     return "N/A"
 
 # =========================
@@ -127,7 +125,60 @@ async def update_stock():
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# PANEL (UNCHANGED)
+# 🆕 BULK SYSTEM (MODAL)
+# =========================
+
+class QuantityModal(discord.ui.Modal):
+    def __init__(self, item_name, action):
+        super().__init__(title=f"{action.title()} Stock")
+        self.item_name = item_name
+        self.action = action
+
+        self.amount = discord.ui.TextInput(
+            label="Amount",
+            placeholder="Enter number (e.g. 10)",
+            required=True
+        )
+
+        self.add_item(self.amount)
+
+    async def on_submit(self, interaction: discord.Interaction):
+
+        try:
+            amount = int(self.amount.value)
+        except:
+            return await interaction.response.send_message(
+                "❌ Please enter a valid number",
+                ephemeral=True
+            )
+
+        if amount <= 0:
+            return await interaction.response.send_message(
+                "❌ Must be greater than 0",
+                ephemeral=True
+            )
+
+        # ADD STOCK
+        if self.action == "add":
+            stock[self.item_name] = stock.get(self.item_name, 0) + amount
+
+        # REMOVE STOCK
+        else:
+            if self.item_name in stock:
+                stock[self.item_name] -= amount
+                if stock[self.item_name] <= 0:
+                    del stock[self.item_name]
+
+        save_stock(stock)
+        await update_stock()
+
+        await interaction.response.send_message(
+            f"✅ {self.action.title()}ed {amount}x {self.item_name}",
+            ephemeral=True
+        )
+
+# =========================
+# PANEL
 # =========================
 
 class StockPanel(discord.ui.View):
@@ -230,23 +281,8 @@ class ItemDropdown(discord.ui.Select):
 
         item = self.values[0]
 
-        # ADD STOCK
-        if self.action == "add":
-            stock[item] = stock.get(item, 0) + 1
-
-        # REMOVE STOCK
-        else:
-            if item in stock:
-                stock[item] -= 1
-                if stock[item] <= 0:
-                    del stock[item]
-
-        save_stock(stock)
-        await update_stock()
-
-        await interaction.response.send_message(
-            f"✅ Updated: {item}",
-            ephemeral=True
+        await interaction.response.send_modal(
+            QuantityModal(item, self.action)
         )
 
 # =========================
