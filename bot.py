@@ -134,14 +134,16 @@ async def update_stock():
 
     embed = build_embed()
 
+    # if we have a message id, try edit safely
     if STOCK_MESSAGE_ID:
         try:
             msg = await channel.fetch_message(STOCK_MESSAGE_ID)
             await msg.edit(embed=embed)
             return
-        except:
-            pass
+        except Exception:
+            STOCK_MESSAGE_ID = None  # reset if broken
 
+    # fallback: send new message
     msg = await channel.send(embed=embed)
     STOCK_MESSAGE_ID = msg.id
 
