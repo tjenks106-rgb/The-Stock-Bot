@@ -70,7 +70,7 @@ def get_category(item_name: str):
     return None
 
 # =========================
-# EMBED
+# EMBED (FIXED: HIDE EMPTY CATEGORIES)
 # =========================
 
 def build_embed():
@@ -84,18 +84,39 @@ def build_embed():
         embed.description = "No stock available"
         return embed
 
-    for name, qty in stock.items():
+    found_any = False
 
-        if qty <= 0:
+    for category, items in catalog.items():
+
+        category_lines = []
+
+        for item in items:
+            name = item["name"]
+            qty = stock.get(name, 0)
+
+            if qty <= 0:
+                continue
+
+            price = item.get("price", "N/A")
+
+            category_lines.append(
+                f"**{name}**\nStock: {qty}x | 💰 {price}"
+            )
+
+        # 🚨 HIDE CATEGORY IF EMPTY
+        if not category_lines:
             continue
 
-        price = get_price(name)
+        found_any = True
 
         embed.add_field(
-            name=name,
-            value=f"**Stock:** {qty}x\n💰 **Price:** {price}",
+            name=f"📦 {category.capitalize()}",
+            value="\n\n".join(category_lines),
             inline=False
         )
+
+    if not found_any:
+        embed.description = "No stock available"
 
     return embed
 
@@ -158,8 +179,11 @@ class QuantityModal(discord.ui.Modal):
                 ephemeral=True
             )
 
+        # ADD STOCK
         if self.action == "add":
             stock[self.item_name] = stock.get(self.item_name, 0) + amount
+
+        # REMOVE STOCK
         else:
             if self.item_name in stock:
                 stock[self.item_name] -= amount
@@ -210,7 +234,7 @@ class StockPanel(discord.ui.View):
         )
 
 # =========================
-# CATEGORY SELECT (FIXED)
+# CATEGORY SELECT
 # =========================
 
 class CategorySelect(discord.ui.View):
@@ -219,37 +243,12 @@ class CategorySelect(discord.ui.View):
         super().__init__(timeout=60)
         self.action = action
 
-        options = []
+        options = [
+            discord.SelectOption(label=c.capitalize(), value=c)
+            for c in catalog.keys()
+        ]
 
-        for category, items in catalog.items():
-
-            has_stock = False
-
-            for item in items:
-                name = item.get("name")
-
-                if stock.get(name, 0) > 0:
-                    has_stock = True
-                    break
-
-            if has_stock:
-                options.append(
-                    discord.SelectOption(
-                        label=category.capitalize(),
-                        value=category
-                    )
-                )
-
-        if not options:
-            options = [
-                discord.SelectOption(
-                    label="No stocked categories",
-                    value="none"
-                )
-            ]
-
-        self.add_item(CategoryDropdown(options, self.action))
-
+        self.add_item(CategoryDropdown(options, action))
 
 class CategoryDropdown(discord.ui.Select):
 
@@ -259,12 +258,6 @@ class CategoryDropdown(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
 
-        if self.values[0] == "none":
-            return await interaction.response.send_message(
-                "❌ No categories currently have stock.",
-                ephemeral=True
-            )
-
         category = self.values[0]
         items = catalog.get(category, [])
 
@@ -272,6 +265,12 @@ class CategoryDropdown(discord.ui.Select):
             discord.SelectOption(label=i["name"], value=i["name"])
             for i in items[:25]
         ]
+
+        if not options:
+            return await interaction.response.send_message(
+                "❌ No items in this category",
+                ephemeral=True
+            )
 
         await interaction.response.send_message(
             "Select item:",
@@ -293,11 +292,16 @@ class ItemSelect(discord.ui.View):
 class ItemDropdown(discord.ui.Select):
 
     def __init__(self, options, action):
-        super().__init__(placeholder="Select item", options=options)
+        super().__init__(
+            placeholder="Select item",
+            options=options
+        )
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
+
         item = self.values[0]
+
         await interaction.response.send_modal(
             QuantityModal(item, self.action)
         )
@@ -309,7 +313,9 @@ class ItemDropdown(discord.ui.Select):
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
+
     await update_stock()
+
     bot.add_view(StockPanel())
 
 # =========================
