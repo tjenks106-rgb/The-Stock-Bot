@@ -60,7 +60,7 @@ def has_permission(member: discord.Member):
     return any(role.name in ALLOWED_ROLES for role in member.roles)
 
 # =========================
-# EMBED
+# EMBED (FIXED)
 # =========================
 
 def build_stock_embed():
@@ -77,9 +77,15 @@ def build_stock_embed():
         "packs": "📦"
     }
 
+    has_items = False
+
     for category, items in stock.items():
+
+        # 🔥 FIX: skip empty categories
         if not items:
             continue
+
+        has_items = True
 
         embed.add_field(
             name=f"{emoji_map.get(category, '📁')} {category.capitalize()}",
@@ -87,6 +93,10 @@ def build_stock_embed():
             inline=False
         )
 
+    if not has_items:
+        embed.description = "❌ No stock available"
+
+    embed.set_footer(text="Limited • Premium • Event Vehicles")
     return embed
 
 # =========================
@@ -152,22 +162,17 @@ async def on_ready():
     await send_or_update_stock_panel()
     await send_or_update_admin_panel()
 
-    # 🔥 FIX: register persistent view
     bot.add_view(StockPanel())
 
 # =========================
-# STOCK PANEL
+# BUTTON PANEL
 # =========================
 
 class StockPanel(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(
-        label="➕ Add Stock",
-        style=discord.ButtonStyle.success,
-        custom_id="add_stock_btn"
-    )
+    @discord.ui.button(label="➕ Add Stock", style=discord.ButtonStyle.success, custom_id="add_stock_btn")
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
 
         if interaction.channel.id != ADMIN_CHANNEL_ID:
@@ -184,11 +189,7 @@ class StockPanel(discord.ui.View):
             ephemeral=True
         )
 
-    @discord.ui.button(
-        label="➖ Remove Stock",
-        style=discord.ButtonStyle.danger,
-        custom_id="remove_stock_btn"
-    )
+    @discord.ui.button(label="➖ Remove Stock", style=discord.ButtonStyle.danger, custom_id="remove_stock_btn")
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
 
         if interaction.channel.id != ADMIN_CHANNEL_ID:
@@ -206,7 +207,7 @@ class StockPanel(discord.ui.View):
         )
 
 # =========================
-# CATEGORY SELECT (FIXED SAFE)
+# CATEGORY SELECT
 # =========================
 
 class CategorySelect(discord.ui.View):
@@ -241,7 +242,7 @@ class CategoryDropdown(discord.ui.Select):
         )
 
 # =========================
-# VEHICLE SELECT (FIXED SAFE)
+# VEHICLE SELECT
 # =========================
 
 class VehicleSelect(discord.ui.View):
@@ -250,13 +251,15 @@ class VehicleSelect(discord.ui.View):
         self.category = category
         self.action = action
 
+        items = stock.get(category, [])
+
         options = [
             discord.SelectOption(label=v, value=v)
-            for v in stock.get(category, [])
+            for v in items
         ]
 
         if not options:
-            options = [discord.SelectOption(label="No vehicles", value="none")]
+            options = [discord.SelectOption(label="No vehicles in stock", value="none")]
 
         self.add_item(VehicleDropdown(options, category, action))
 
