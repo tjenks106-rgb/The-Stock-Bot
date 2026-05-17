@@ -35,7 +35,7 @@ intents.members = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # =========================
-# STOCK FILE
+# LOAD STOCK
 # =========================
 
 def load_stock():
@@ -60,7 +60,7 @@ def has_permission(member: discord.Member):
     return any(role.name in ALLOWED_ROLES for role in member.roles)
 
 # =========================
-# EMBED (FIXED)
+# EMBED
 # =========================
 
 def build_stock_embed():
@@ -77,15 +77,12 @@ def build_stock_embed():
         "packs": "📦"
     }
 
-    has_items = False
-
     for category, items in stock.items():
-
-        # 🔥 FIX: skip empty categories
-        if not items:
+        if category == "master_list":
             continue
 
-        has_items = True
+        if not items:
+            continue
 
         embed.add_field(
             name=f"{emoji_map.get(category, '📁')} {category.capitalize()}",
@@ -93,14 +90,10 @@ def build_stock_embed():
             inline=False
         )
 
-    if not has_items:
-        embed.description = "❌ No stock available"
-
-    embed.set_footer(text="Limited • Premium • Event Vehicles")
     return embed
 
 # =========================
-# STOCK UPDATE
+# UPDATE STOCK PANEL
 # =========================
 
 async def send_or_update_stock_panel():
@@ -124,7 +117,7 @@ async def send_or_update_stock_panel():
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# ADMIN PANEL UPDATE
+# ADMIN PANEL
 # =========================
 
 async def send_or_update_admin_panel():
@@ -181,11 +174,9 @@ class StockPanel(discord.ui.View):
         if not has_permission(interaction.user):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
 
-        await interaction.response.defer(ephemeral=True)
-
-        await interaction.followup.send(
-            "📂 Select category to ADD:",
-            view=CategorySelect(action="add"),
+        await interaction.response.send_message(
+            "Select item to ADD:",
+            view=MasterSelect(action="add"),
             ephemeral=True
         )
 
@@ -198,103 +189,124 @@ class StockPanel(discord.ui.View):
         if not has_permission(interaction.user):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
 
-        await interaction.response.defer(ephemeral=True)
-
-        await interaction.followup.send(
-            "📂 Select category to REMOVE:",
-            view=CategorySelect(action="remove"),
+        await interaction.response.send_message(
+            "Select item to REMOVE:",
+            view=MasterSelect(action="remove"),
             ephemeral=True
         )
 
 # =========================
-# CATEGORY SELECT
+# MASTER LIST SELECT
 # =========================
 
-class CategorySelect(discord.ui.View):
+class MasterSelect(discord.ui.View):
     def __init__(self, action):
         super().__init__(timeout=60)
         self.action = action
 
         options = [
-            discord.SelectOption(label=cat, value=cat)
-            for cat in stock.keys()
+            discord.SelectOption(label=item, value=item)
+            for item in stock.get("master_list", [])
         ]
 
-        if not options:
-            options = [discord.SelectOption(label="No categories", value="none")]
+        self.add_item(MasterDropdown(options, action))
 
-        self.add_item(CategoryDropdown(options, action))
-
-class CategoryDropdown(discord.ui.Select):
+class MasterDropdown(discord.ui.Select):
     def __init__(self, options, action):
-        super().__init__(placeholder="Select category...", options=options)
-        self.action = action
-
-    async def callback(self, interaction: discord.Interaction):
-        category = self.values[0]
-
-        await interaction.response.defer(ephemeral=True)
-
-        await interaction.followup.send(
-            "🚗 Select vehicle:",
-            view=VehicleSelect(category, self.action),
-            ephemeral=True
-        )
-
-# =========================
-# VEHICLE SELECT
-# =========================
-
-class VehicleSelect(discord.ui.View):
-    def __init__(self, category, action):
-        super().__init__(timeout=60)
-        self.category = category
-        self.action = action
-
-        items = stock.get(category, [])
-
-        options = [
-            discord.SelectOption(label=v, value=v)
-            for v in items
-        ]
-
-        if not options:
-            options = [discord.SelectOption(label="No vehicles in stock", value="none")]
-
-        self.add_item(VehicleDropdown(options, category, action))
-
-class VehicleDropdown(discord.ui.Select):
-    def __init__(self, options, category, action):
         super().__init__(placeholder="Select vehicle...", options=options)
-        self.category = category
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
-        vehicle = self.values[0]
-        cat = self.category
 
-        if vehicle == "none":
-            return await interaction.response.send_message("❌ Nothing available.", ephemeral=True)
+        item = self.values[0]
+
+        if item == "none":
+            return await interaction.response.send_message("❌ Nothing found.", ephemeral=True)
+
+        category = get_category(item)
+
+        if not category:
+            return await interaction.response.send_message("❌ Unknown category.", ephemeral=True)
 
         if self.action == "add":
-            if vehicle not in stock[cat]:
-                stock[cat].append(vehicle)
+            if item not in stock[category]:
+                stock[category].append(item)
 
         elif self.action == "remove":
-            if vehicle in stock[cat]:
-                stock[cat].remove(vehicle)
+            if item in stock[category]:
+                stock[category].remove(item)
 
         save_stock(stock)
 
         await send_or_update_stock_panel()
 
         await interaction.response.send_message(
-            f"✅ Updated stock: **{vehicle}**",
+            f"✅ Updated stock: **{item}**",
             ephemeral=True
         )
 
 # =========================
-# RUN
+# CATEGORY MAPPING
+# =========================
+
+def get_category(item):
+
+    vehicles = {
+        "Sled","Sleigh","SL Medium","Euro Hauler 1280","Cybertruck","Train",
+        "DG Semi","R350 SD","Kei Pickup","Marley Pickup","Titan X","Pace IX CH",
+        "Pace IX LT","Titan","Foxx Metal Tech P1","R500"
+    }
+
+    tractors = {
+        "Vertra 135","Vintage Tractor","KM472","Claas Xerion 5000","Fordson",
+        "Rusty Tractor","Medal Tractor","SOPT 925","Foxx Metal Tech X1",
+        "ER80T","Zalter 500"
+    }
+
+    harvesters = {
+        "NA CR10","Vintage Harvester","ActiveS7","Claas 790","Mega Baler"
+    }
+
+    trailers = {
+        "Insul Animal Trailer","Small Log Hauler","Legendary Log Transport",
+        "Levi Flatbed","Large Crop Trailer","Large Box Trailer","Vintage Flatbed",
+        "Vintage Log Trailer","Titan LH","Titan CH","Solid Hauler 47",
+        "Marley Liquid Hauler","Marley Crop Hauler","Kei Liquid Hauler",
+        "Kei Crop Hauler","R1950 Liquid","DG LT","DG CT"
+    }
+
+    plows = {"ROM2400","ZC3","WRXL2","GFS10","NSH","Maltex P680"}
+    cultivators = {"Swifter 180","LAT 360","Foxx Chamber 105","Maltex C4500 Global"}
+    seeders = {"Pronto9","EFC 8300 Drill","ATM 700","Zalter-S 270"}
+
+    packs = {
+        "Truck N' Trailers Pack","DG Semi Pack","Vintage Semi Pack",
+        "1950's Truck Pack","Starter Pack","Kei Truck Pack","Marley Truck Pack",
+        "Cyber Pack","Christmas Vehicle Pack","Lumber Starter Pack","Zalter Pack",
+        "Titan Truck Pack","Insul Pack","Pace IX Pack"
+    }
+
+    if item in vehicles:
+        return "vehicles"
+    if item in tractors:
+        return "tractors"
+    if item in harvesters:
+        return "harvesters"
+    if item in trailers:
+        return "trailers"
+    if item in plows:
+        return "plows"
+    if item in cultivators:
+        return "cultivators"
+    if item in seeders:
+        return "seeders"
+    if item in packs:
+        return "packs"
+
+    return None
+
+# =========================
+# RUN BOT
 # =========================
 
 bot.run(TOKEN)

@@ -1,5 +1,14 @@
 {
-  "vehicles": [
+  "vehicles": [],
+  "tractors": [],
+  "harvesters": [],
+  "trailers": [],
+  "plows": [],
+  "cultivators": [],
+  "seeders": [],
+  "packs": [],
+
+  "master_list": [
     "Sled",
     "Sleigh",
     "SL Medium",
@@ -19,10 +28,8 @@
     "Pace IX LT",
     "Titan",
     "Foxx Metal Tech P1",
-    "R500"
-  ],
+    "R500",
 
-  "tractors": [
     "Vertra 135",
     "Vintage Tractor",
     "KM472",
@@ -33,18 +40,14 @@
     "SOPT 925",
     "Foxx Metal Tech X1",
     "ER80T",
-    "Zalter 500"
-  ],
+    "Zalter 500",
 
-  "harvesters": [
     "NA CR10",
     "Vintage Harvester",
     "ActiveS7",
     "Claas 790",
-    "Mega Baler"
-  ],
+    "Mega Baler",
 
-  "trailers": [
     "Insul Animal Trailer",
     "Small Log Hauler",
     "Legendary Log Transport",
@@ -62,33 +65,25 @@
     "Kei Crop Hauler",
     "R1950 Liquid",
     "DG LT",
-    "DG CT"
-  ],
+    "DG CT",
 
-  "plows": [
     "ROM2400",
     "ZC3",
     "WRXL2",
     "GFS10",
     "NSH",
-    "Maltex P680"
-  ],
+    "Maltex P680",
 
-  "cultivators": [
     "Swifter 180",
     "LAT 360",
     "Foxx Chamber 105",
-    "Maltex C4500 Global"
-  ],
+    "Maltex C4500 Global",
 
-  "seeders": [
     "Pronto9",
     "EFC 8300 Drill",
     "ATM 700",
-    "Zalter-S 270"
-  ],
+    "Zalter-S 270",
 
-  "packs": [
     "Truck N' Trailers Pack",
     "DG Semi Pack",
     "Vintage Semi Pack",
