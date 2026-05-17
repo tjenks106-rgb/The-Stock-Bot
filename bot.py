@@ -10,14 +10,13 @@ import os
 TOKEN = os.getenv("TOKEN")
 
 if TOKEN is None:
-    raise Exception("❌ TOKEN is missing in Railway environment variables!")
+    raise Exception("❌ TOKEN missing in Railway env vars")
 
 # =========================
 # CONFIG
 # =========================
 
 GUILD_ID = 1504537814312685640
-
 STOCK_CHANNEL_ID = 1504575488834670743
 ADMIN_CHANNEL_ID = 1505344381509697740
 
@@ -35,24 +34,17 @@ intents.members = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # =========================
-# LOAD STOCK SAFE
+# LOAD STOCK
 # =========================
 
 def load_stock():
     try:
         with open("stock.json", "r") as f:
             data = json.load(f)
-
-        # ensure master_list always exists
         if "master_list" not in data:
             data["master_list"] = []
-
         return data
-
-    except Exception as e:
-        print("❌ STOCK LOAD ERROR:", e)
-
-        # fallback safe structure
+    except:
         return {
             "vehicles": [],
             "tractors": [],
@@ -65,22 +57,11 @@ def load_stock():
             "master_list": []
         }
 
-def save_stock(stock_data):
+def save_stock(data):
     with open("stock.json", "w") as f:
-        json.dump(stock_data, f, indent=4)
+        json.dump(data, f, indent=4)
 
 stock = load_stock()
-
-# =========================
-# PERMISSIONS
-# =========================
-
-ALLOWED_ROLES = ["Staff", "moderator", "bot developer"]
-
-def has_permission(member: discord.Member):
-    if member.guild.owner_id == member.id:
-        return True
-    return any(role.name in ALLOWED_ROLES for role in member.roles)
 
 # =========================
 # CATEGORY MAP
@@ -88,47 +69,39 @@ def has_permission(member: discord.Member):
 
 def get_category(item):
 
-    vehicles = {
-        "Sled","Sleigh","SL Medium","Euro Hauler 1280","Cyber Semi","Cybertruck",
-        "Train","DG Semi","R350 SD","Kei Pickup","Marley Pickup","Titan X",
-        "Pace IX CH","Pace IX LT","Titan","Foxx Metal Tech P1","R500"
+    mapping = {
+        "vehicles": {
+            "Sled","Sleigh","SL Medium","Euro Hauler 1280","Cyber Semi","Cybertruck",
+            "Train","DG Semi","R350 SD","Kei Pickup","Marley Pickup","Titan X",
+            "Pace IX CH","Pace IX LT","Titan","Foxx Metal Tech P1","R500"
+        },
+        "tractors": {
+            "Vertra 135","Vintage Tractor","KM472","Claas Xerion 5000","Fordson",
+            "Rusty Tractor","Medal Tractor","SOPT 925","Foxx Metal Tech X1",
+            "ER80T","Zalter 500"
+        },
+        "harvesters": {"NA CR10","Vintage Harvester","ActiveS7","Claas 790","Mega Baler"},
+        "trailers": {
+            "Insul Animal Trailer","Small Log Hauler","Legendary Log Transport",
+            "Levi Flatbed","Large Crop Trailer","Large Box Trailer","Vintage Flatbed",
+            "Vintage Log Trailer","Titan LH","Titan CH","Solid Hauler 47",
+            "Marley Liquid Hauler","Marley Crop Hauler","Kei Liquid Hauler",
+            "Kei Crop Hauler","R1950 Liquid","DG LT","DG CT"
+        },
+        "plows": {"ROM2400","ZC3","WRXL2","GFS10","NSH","Maltex P680"},
+        "cultivators": {"Swifter 180","LAT 360","Foxx Chamber 105","Maltex C4500 Global"},
+        "seeders": {"Pronto9","EFC 8300 Drill","ATM 700","Zalter-S 270"},
+        "packs": {
+            "Truck N' Trailers Pack","DG Semi Pack","Vintage Semi Pack",
+            "1950's Truck Pack","Starter Pack","Kei Truck Pack","Marley Truck Pack",
+            "Cyber Pack","Christmas Vehicle Pack","Lumber Starter Pack",
+            "Zalter Pack","Titan Truck Pack","Insul Pack","Pace IX Pack"
+        }
     }
 
-    tractors = {
-        "Vertra 135","Vintage Tractor","KM472","Claas Xerion 5000","Fordson",
-        "Rusty Tractor","Medal Tractor","SOPT 925","Foxx Metal Tech X1",
-        "ER80T","Zalter 500"
-    }
-
-    harvesters = {"NA CR10","Vintage Harvester","ActiveS7","Claas 790","Mega Baler"}
-
-    trailers = {
-        "Insul Animal Trailer","Small Log Hauler","Legendary Log Transport",
-        "Levi Flatbed","Large Crop Trailer","Large Box Trailer","Vintage Flatbed",
-        "Vintage Log Trailer","Titan LH","Titan CH","Solid Hauler 47",
-        "Marley Liquid Hauler","Marley Crop Hauler","Kei Liquid Hauler",
-        "Kei Crop Hauler","R1950 Liquid","DG LT","DG CT"
-    }
-
-    plows = {"ROM2400","ZC3","WRXL2","GFS10","NSH","Maltex P680"}
-    cultivators = {"Swifter 180","LAT 360","Foxx Chamber 105","Maltex C4500 Global"}
-    seeders = {"Pronto9","EFC 8300 Drill","ATM 700","Zalter-S 270"}
-
-    packs = {
-        "Truck N' Trailers Pack","DG Semi Pack","Vintage Semi Pack",
-        "1950's Truck Pack","Starter Pack","Kei Truck Pack","Marley Truck Pack",
-        "Cyber Pack","Christmas Vehicle Pack","Lumber Starter Pack",
-        "Zalter Pack","Titan Truck Pack","Insul Pack","Pace IX Pack"
-    }
-
-    if item in vehicles: return "vehicles"
-    if item in tractors: return "tractors"
-    if item in harvesters: return "harvesters"
-    if item in trailers: return "trailers"
-    if item in plows: return "plows"
-    if item in cultivators: return "cultivators"
-    if item in seeders: return "seeders"
-    if item in packs: return "packs"
+    for cat, items in mapping.items():
+        if item in items:
+            return cat
 
     return None
 
@@ -139,25 +112,25 @@ def get_category(item):
 def build_stock_embed():
     embed = discord.Embed(title="🔥 Current Stock", color=0x39ff14)
 
-    emoji_map = {
-        "vehicles": "🚗",
-        "tractors": "🚜",
-        "harvesters": "🌾",
-        "trailers": "🚛",
-        "plows": "🛠️",
-        "cultivators": "⚙️",
-        "seeders": "🌱",
-        "packs": "📦"
+    emoji = {
+        "vehicles":"🚗",
+        "tractors":"🚜",
+        "harvesters":"🌾",
+        "trailers":"🚛",
+        "plows":"🛠️",
+        "cultivators":"⚙️",
+        "seeders":"🌱",
+        "packs":"📦"
     }
 
-    for category, items in stock.items():
-        if category == "master_list":
+    for cat, items in stock.items():
+        if cat == "master_list":
             continue
         if not items:
             continue
 
         embed.add_field(
-            name=f"{emoji_map.get(category,'📁')} {category.capitalize()}",
+            name=f"{emoji.get(cat,'📁')} {cat.capitalize()}",
             value="\n".join(items),
             inline=False
         )
@@ -165,10 +138,10 @@ def build_stock_embed():
     return embed
 
 # =========================
-# STOCK UPDATE
+# UPDATE STOCK
 # =========================
 
-async def send_or_update_stock_panel():
+async def update_stock():
     global STOCK_MESSAGE_ID
 
     channel = bot.get_channel(STOCK_CHANNEL_ID)
@@ -192,7 +165,7 @@ async def send_or_update_stock_panel():
 # ADMIN PANEL
 # =========================
 
-async def send_or_update_admin_panel():
+async def update_admin():
     global ADMIN_MESSAGE_ID
 
     channel = bot.get_channel(ADMIN_CHANNEL_ID)
@@ -201,7 +174,7 @@ async def send_or_update_admin_panel():
 
     embed = discord.Embed(
         title="🛠️ Stock Panel",
-        description="Use buttons to manage stock",
+        description="Manage stock below",
         color=0xffa500
     )
 
@@ -222,102 +195,115 @@ async def send_or_update_admin_panel():
 
 @bot.event
 async def on_ready():
-    print(f"✅ Logged in as {bot.user}")
-
-    print("MASTER LIST:", stock.get("master_list"))
-
-    await send_or_update_stock_panel()
-    await send_or_update_admin_panel()
-
+    print(f"Logged in as {bot.user}")
+    await update_stock()
+    await update_admin()
     bot.add_view(StockPanel())
 
 # =========================
-# BUTTON PANEL
+# MAIN PANEL
 # =========================
 
 class StockPanel(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="➕ Add Stock", style=discord.ButtonStyle.success, custom_id="add_stock")
+    @discord.ui.button(label="➕ Add Stock", style=discord.ButtonStyle.success, custom_id="add")
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
 
-        if not has_permission(interaction.user):
-            return await interaction.response.send_message("❌ No permission", ephemeral=True)
-
         await interaction.response.send_message(
-            "Select item to ADD:",
-            view=MasterSelect("add"),
+            "Select category:",
+            view=CategorySelect("add"),
             ephemeral=True
         )
 
-    @discord.ui.button(label="➖ Remove Stock", style=discord.ButtonStyle.danger, custom_id="remove_stock")
+    @discord.ui.button(label="➖ Remove Stock", style=discord.ButtonStyle.danger, custom_id="remove")
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
 
-        if not has_permission(interaction.user):
-            return await interaction.response.send_message("❌ No permission", ephemeral=True)
-
         await interaction.response.send_message(
-            "Select item to REMOVE:",
-            view=MasterSelect("remove"),
+            "Select category:",
+            view=CategorySelect("remove"),
             ephemeral=True
         )
 
 # =========================
-# MASTER SELECT (FIXED SAFETY)
+# CATEGORY SELECT
 # =========================
 
-class MasterSelect(discord.ui.View):
+class CategorySelect(discord.ui.View):
     def __init__(self, action):
         super().__init__(timeout=60)
         self.action = action
 
-        items = stock.get("master_list") or []
-
-        # HARD SAFETY
-        if len(items) == 0:
-            items = ["NO ITEMS LOADED"]
-
         options = [
-            discord.SelectOption(label=str(i)[:100], value=str(i)[:100])
-            for i in items
+            discord.SelectOption(label=c.capitalize(), value=c)
+            for c in ["vehicles","tractors","harvesters","trailers","plows","cultivators","seeders","packs"]
         ]
 
-        if len(options) == 0:
-            options = [discord.SelectOption(label="EMPTY LIST", value="none")]
+        self.add_item(CategoryDropdown(options, action))
 
-        self.add_item(MasterDropdown(options, action))
-
-class MasterDropdown(discord.ui.Select):
+class CategoryDropdown(discord.ui.Select):
     def __init__(self, options, action):
-        super().__init__(placeholder="Select item...", options=options)
+        super().__init__(placeholder="Select category", options=options)
+        self.action = action
+
+    async def callback(self, interaction: discord.Interaction):
+
+        category = self.values[0]
+
+        items = stock.get("master_list", [])
+        filtered = [i for i in items if get_category(i) == category]
+
+        if not filtered:
+            return await interaction.response.send_message("❌ No items", ephemeral=True)
+
+        filtered = filtered[:25]  # DISCORD LIMIT
+
+        options = [
+            discord.SelectOption(label=i[:100], value=i[:100])
+            for i in filtered
+        ]
+
+        await interaction.response.send_message(
+            "Select item:",
+            view(ItemSelect(options, category, self.action)),
+            ephemeral=True
+        )
+
+# =========================
+# ITEM SELECT
+# =========================
+
+class ItemSelect(discord.ui.View):
+    def __init__(self, options, category, action):
+        super().__init__(timeout=60)
+        self.category = category
+        self.action = action
+        self.add_item(ItemDropdown(options, category, action))
+
+class ItemDropdown(discord.ui.Select):
+    def __init__(self, options, category, action):
+        super().__init__(placeholder="Select item", options=options)
+        self.category = category
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
 
         item = self.values[0]
-
-        if item in ["none", "NO ITEMS LOADED"]:
-            return await interaction.response.send_message("❌ Master list not loaded.", ephemeral=True)
-
-        category = get_category(item)
-
-        if not category:
-            return await interaction.response.send_message("❌ Unknown category.", ephemeral=True)
+        cat = self.category
 
         if self.action == "add":
-            if item not in stock[category]:
-                stock[category].append(item)
+            if item not in stock[cat]:
+                stock[cat].append(item)
 
-        elif self.action == "remove":
-            if item in stock[category]:
-                stock[category].remove(item)
+        else:
+            if item in stock[cat]:
+                stock[cat].remove(item)
 
         save_stock(stock)
+        await update_stock()
 
-        await send_or_update_stock_panel()
-
-        await interaction.response.send_message(f"✅ Updated: {item}", ephemeral=True)
+        await interaction.response.send_message("✅ Updated", ephemeral=True)
 
 # =========================
 # RUN
