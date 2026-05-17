@@ -1,10 +1,107 @@
 {
-    "vehicles": [],
-    "tractors": [],
-    "harvesters": [],
-    "trailers": [],
-    "plows": [],
-    "cultivators": [],
-    "seeders": [],
-    "packs": []
+  "vehicles": [
+    "Sled",
+    "Sleigh",
+    "SL Medium",
+    "Euro Hauler 1280",
+    "Automatic Flatbed",
+    "Solid Hauler 4700",
+    "Cyber Semi",
+    "Cybertruck",
+    "Train",
+    "Vintage Semi",
+    "DG Semi",
+    "R350 SD",
+    "Kei Pickup",
+    "Marley Pickup",
+    "Titan X",
+    "Pace IX CH",
+    "Pace IX LT",
+    "Titan",
+    "Foxx Metal Tech P1",
+    "R500"
+  ],
+
+  "tractors": [
+    "Vertra 135",
+    "Vintage Tractor",
+    "KM472",
+    "Claas Xerion 5000",
+    "Fordson",
+    "Rusty Tractor",
+    "Medal Tractor",
+    "SOPT 925",
+    "Foxx Metal Tech X1",
+    "ER80T",
+    "Zalter 500"
+  ],
+
+  "harvesters": [
+    "NA CR10",
+    "Vintage Harvester",
+    "ActiveS7",
+    "Claas 790",
+    "Mega Baler"
+  ],
+
+  "trailers": [
+    "Insul Animal Trailer",
+    "Small Log Hauler",
+    "Legendary Log Transport",
+    "Levi Flatbed",
+    "Large Crop Trailer",
+    "Large Box Trailer",
+    "Vintage Flatbed",
+    "Vintage Log Trailer",
+    "Titan LH",
+    "Titan CH",
+    "Solid Hauler 47",
+    "Marley Liquid Hauler",
+    "Marley Crop Hauler",
+    "Kei Liquid Hauler",
+    "Kei Crop Hauler",
+    "R1950 Liquid",
+    "DG LT",
+    "DG CT"
+  ],
+
+  "plows": [
+    "ROM2400",
+    "ZC3",
+    "WRXL2",
+    "GFS10",
+    "NSH",
+    "Maltex P680"
+  ],
+
+  "cultivators": [
+    "Swifter 180",
+    "LAT 360",
+    "Foxx Chamber 105",
+    "Maltex C4500 Global"
+  ],
+
+  "seeders": [
+    "Pronto9",
+    "EFC 8300 Drill",
+    "ATM 700",
+    "Zalter-S 270"
+  ],
+
+  "packs": [
+    "Truck N' Trailers Pack",
+    "DG Semi Pack",
+    "Vintage Semi Pack",
+    "1950's Truck Pack",
+    "Starter Pack",
+    "Kei Truck Pack",
+    "Marley Truck Pack",
+    "Cyber Pack",
+    "Christmas Vehicle Pack",
+    "Lumber Starter Pack",
+    "Zalter Pack",
+    "Titan Truck Pack",
+    "Insul Pack",
+    "Pace IX Pack"
+  ]
 }
