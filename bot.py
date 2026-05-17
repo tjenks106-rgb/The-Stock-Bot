@@ -70,7 +70,7 @@ def get_category(item_name: str):
     return None
 
 # =========================
-# EMBED
+# EMBED (FIXED: HIDE EMPTY CATEGORIES)
 # =========================
 
 def build_embed():
@@ -84,18 +84,39 @@ def build_embed():
         embed.description = "No stock available"
         return embed
 
-    for name, qty in stock.items():
+    found_any = False
 
-        if qty <= 0:
+    for category, items in catalog.items():
+
+        category_lines = []
+
+        for item in items:
+            name = item["name"]
+            qty = stock.get(name, 0)
+
+            if qty <= 0:
+                continue
+
+            price = item.get("price", "N/A")
+
+            category_lines.append(
+                f"**{name}**\nStock: {qty}x | 💰 {price}"
+            )
+
+        # 🚨 HIDE CATEGORY IF EMPTY
+        if not category_lines:
             continue
 
-        price = get_price(name)
+        found_any = True
 
         embed.add_field(
-            name=name,
-            value=f"**Stock:** {qty}x\n💰 **Price:** {price}",
+            name=f"📦 {category.capitalize()}",
+            value="\n\n".join(category_lines),
             inline=False
         )
+
+    if not found_any:
+        embed.description = "No stock available"
 
     return embed
 
@@ -125,7 +146,7 @@ async def update_stock():
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# 🆕 BULK SYSTEM (MODAL)
+# BULK SYSTEM (MODAL)
 # =========================
 
 class QuantityModal(discord.ui.Modal):
