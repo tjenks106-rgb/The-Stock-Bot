@@ -85,6 +85,7 @@ def build_embed():
         return embed
 
     for name, qty in stock.items():
+
         if qty <= 0:
             continue
 
@@ -188,6 +189,7 @@ class StockPanel(discord.ui.View):
         custom_id="stockpanel_add"
     )
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
+
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("add"),
@@ -200,6 +202,7 @@ class StockPanel(discord.ui.View):
         custom_id="stockpanel_remove"
     )
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
+
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("remove"),
@@ -207,7 +210,7 @@ class StockPanel(discord.ui.View):
         )
 
 # =========================
-# CATEGORY SELECT (FIXED FILTERING)
+# CATEGORY SELECT (FIXED)
 # =========================
 
 class CategorySelect(discord.ui.View):
@@ -216,11 +219,18 @@ class CategorySelect(discord.ui.View):
         super().__init__(timeout=60)
         self.action = action
 
-        # ONLY show categories that actually have stock > 0
         options = []
 
         for category, items in catalog.items():
-            has_stock = any(stock.get(i["name"], 0) > 0 for i in items)
+
+            has_stock = False
+
+            for item in items:
+                name = item.get("name")
+
+                if stock.get(name, 0) > 0:
+                    has_stock = True
+                    break
 
             if has_stock:
                 options.append(
@@ -238,7 +248,7 @@ class CategorySelect(discord.ui.View):
                 )
             ]
 
-        self.add_item(CategoryDropdown(options, action))
+        self.add_item(CategoryDropdown(options, self.action))
 
 
 class CategoryDropdown(discord.ui.Select):
