@@ -54,23 +54,12 @@ catalog = load_catalog()
 def get_price(item_name: str):
     for category, items in catalog.items():
         for item in items:
-            if item["name"] == item_name:
+            if item.get("name") == item_name:
                 return item.get("price", "N/A")
     return "N/A"
 
 # =========================
-# CATEGORY LOOKUP
-# =========================
-
-def get_category(item_name: str):
-    for cat, items in catalog.items():
-        for item in items:
-            if item["name"] == item_name:
-                return cat
-    return None
-
-# =========================
-# EMBED (FIXED: HIDE EMPTY CATEGORIES)
+# EMBED
 # =========================
 
 def build_embed():
@@ -84,39 +73,17 @@ def build_embed():
         embed.description = "No stock available"
         return embed
 
-    found_any = False
-
-    for category, items in catalog.items():
-
-        category_lines = []
-
-        for item in items:
-            name = item["name"]
-            qty = stock.get(name, 0)
-
-            if qty <= 0:
-                continue
-
-            price = item.get("price", "N/A")
-
-            category_lines.append(
-                f"**{name}**\nStock: {qty}x | 💰 {price}"
-            )
-
-        # 🚨 HIDE CATEGORY IF EMPTY
-        if not category_lines:
+    for name, qty in stock.items():
+        if qty <= 0:
             continue
 
-        found_any = True
+        price = get_price(name)
 
         embed.add_field(
-            name=f"📦 {category.capitalize()}",
-            value="\n\n".join(category_lines),
+            name=name,
+            value=f"**Stock:** {qty}x\n💰 **Price:** {price}",
             inline=False
         )
-
-    if not found_any:
-        embed.description = "No stock available"
 
     return embed
 
@@ -134,21 +101,19 @@ async def update_stock():
 
     embed = build_embed()
 
-    # if we have a message id, try edit safely
     if STOCK_MESSAGE_ID:
         try:
             msg = await channel.fetch_message(STOCK_MESSAGE_ID)
             await msg.edit(embed=embed)
             return
-        except Exception:
-            STOCK_MESSAGE_ID = None  # reset if broken
+        except:
+            pass
 
-    # fallback: send new message
     msg = await channel.send(embed=embed)
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# BULK SYSTEM (MODAL)
+# BULK MODAL
 # =========================
 
 class QuantityModal(discord.ui.Modal):
@@ -181,11 +146,8 @@ class QuantityModal(discord.ui.Modal):
                 ephemeral=True
             )
 
-        # ADD STOCK
         if self.action == "add":
             stock[self.item_name] = stock.get(self.item_name, 0) + amount
-
-        # REMOVE STOCK
         else:
             if self.item_name in stock:
                 stock[self.item_name] -= amount
@@ -259,26 +221,35 @@ class CategoryDropdown(discord.ui.Select):
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
+        try:
+            await interaction.response.defer(ephemeral=True)
 
-        category = self.values[0]
-        items = catalog.get(category, [])
+            category = self.values[0]
+            items = catalog.get(category, [])
 
-        options = [
-            discord.SelectOption(label=i["name"], value=i["name"])
-            for i in items[:25]
-        ]
+            options = [
+                discord.SelectOption(label=i["name"], value=i["name"])
+                for i in items if i.get("name")
+            ][:25]
 
-        if not options:
-            return await interaction.response.send_message(
-                "❌ No items in this category",
+            if not options:
+                return await interaction.followup.send(
+                    "❌ No items in this category",
+                    ephemeral=True
+                )
+
+            await interaction.followup.send(
+                "Select item:",
+                view=ItemSelect(options, self.action),
                 ephemeral=True
             )
 
-        await interaction.response.send_message(
-            "Select item:",
-            view=ItemSelect(options, self.action),
-            ephemeral=True
-        )
+        except Exception as e:
+            print("CategoryDropdown ERROR:", e)
+            await interaction.followup.send(
+                "❌ Something went wrong.",
+                ephemeral=True
+            )
 
 # =========================
 # ITEM SELECT
@@ -301,12 +272,19 @@ class ItemDropdown(discord.ui.Select):
         self.action = action
 
     async def callback(self, interaction: discord.Interaction):
+        try:
+            item = self.values[0]
 
-        item = self.values[0]
+            await interaction.response.send_modal(
+                QuantityModal(item, self.action)
+            )
 
-        await interaction.response.send_modal(
-            QuantityModal(item, self.action)
-        )
+        except Exception as e:
+            print("ItemDropdown ERROR:", e)
+            await interaction.response.send_message(
+                "❌ Something went wrong selecting item.",
+                ephemeral=True
+            )
 
 # =========================
 # READY EVENT
@@ -315,9 +293,7 @@ class ItemDropdown(discord.ui.Select):
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
-
     await update_stock()
-
     bot.add_view(StockPanel())
 
 # =========================
