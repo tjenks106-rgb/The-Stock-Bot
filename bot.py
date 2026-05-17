@@ -152,6 +152,8 @@ async def on_ready():
     await send_or_update_stock_panel()
     await send_or_update_admin_panel()
 
+    # 🔥 CRITICAL FIX: register persistent view
+    bot.add_view(StockPanel())
 # =========================
 # BUTTON PANEL
 # =========================
