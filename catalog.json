@@ -280,72 +280,72 @@
   "packs": [
     {
         "name": "Insul Pack",
-        "value": "550m",
+        "price": "550m",
         "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051557116379256/screenshot-2025-12-17-171125-standard.png?ex=6a0b0bde&is=6a09ba5e&hm=8bc8c1994250c7c13e579706f156d038c1a2e2a55a866e71fdf6532e0e0eedb9&format=webp&quality=lossless&width=382&height=213&"
     },
     {
         "name": "Pace IX Pack",
-        "value": "310m",
+        "price": "310m",
         "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493051742303027230/screenshot-2025-12-17-171153-standard.png?ex=6a0b0c0a&is=6a09ba8a&hm=69627670d06042d9d19634ea89652c25ab32576969eebfc36a80f06490c44ab0&"
     },
     {
         "name": "Christmas Vehicle Pack",
-        "value": "300m",
+        "price": "300m",
         "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493052119379476671/screenshot-2025-12-17-171051-standard.png?ex=6a0b0c64&is=6a09bae4&hm=7aa32033e49e065321b283752bfd04d8c797a77cf0ba6a945104f9d41f7752ff&"
     },
     {
         "name": "Titan Truck Pack",
-        "value": "250m",
+        "price": "250m",
         "image": ""
     },
     {
         "name": "Zalter Pack",
-        "value": "220m",
+        "price": "220m",
         "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051680202162226/screenshot-2025-12-17-171100-standard.png?ex=6a0b0bfc&is=6a09ba7c&hm=8f38ff3ba5a8c0850e5519121afa6f6ae40f8ce6dd14bfbf7bd2209796f482cb&format=webp&quality=lossless&width=382&height=215&"
     },
     {
         "name": "Cyber Pack",
-        "value": "210m",
+        "price": "210m",
         "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051181071597800/screenshot-2025-12-17-171108-standard.png?ex=6a0b0b85&is=6a09ba05&hm=a54aeba1f88d1ef0a50923fc415948e6fe88753cbc5cc7e6ba6dc8a8a06cc5f2&format=webp&quality=lossless&width=382&height=217&"
     },
     {
         "name": "Lumber Starter Pack",
-        "value": "130m",
+        "price": "130m",
         "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493052212220268605/pasted-image-sun-mar-08-2026-17-47-13-gmt-0000-greenwich-mean-time-high.png?ex=6a0b0c7a&is=6a09bafa&hm=796b75c3755ed73a3984fe9ab90b0265c29e4995506c9251f0d57ebe31c0e6e3&"
     },
     {
         "name": "Vintage Semi Pack",
-        "value": "120m",
+        "price": "120m",
         "image": "https://media.discordapp.net/attachments/1458083379097374804/1493051422059663470/screenshot-2025-12-17-171118-standard.png?ex=6a0b0bbe&is=6a09ba3e&hm=27a75090e4759e8c3dfd03f62436ccef2af5422ff41184f6485d4e5f9ff7019f&format=webp&quality=lossless&width=382&height=216&"
     },
     {
         "name": "Kei Truck Pack",
-        "value": "120m",
+        "price": "120m",
         "image": ""
     },
     {
         "name": "1950's Truck Pack",
-        "value": "100m",
+        "price": "100m",
         "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493051864105619486/screenshot-2025-12-17-171133-standard.png?ex=6a0b0c27&is=6a09baa7&hm=cf6202c555b856d8dd189bd8d44f72e334b29f94e67ed44b052cd73ce0d2a6a1&"
     },
     {
         "name": "Marley Truck Pack",
-        "value": "86m",
+        "price": "86m",
         "image": "https://cdn.discordapp.com/attachments/1458083379097374804/1493052050945216522/screenshot-2025-12-17-171140-standard.png?ex=6a0b0c54&is=6a09bad4&hm=61d2ea121746397ac3cfefdfa5d1f8ce1e34138c165666794ce64922b12b9269&"
     },
     {
         "name": "Truck N' Trailers Pack",
-        "value": "40m",
+        "price": "40m",
         "image": "https://media.discordapp.net/attachments/1458083379097374804/1493049800894054562/screenshot-2025-12-17-171231-standard.png?ex=6a0b0a3c&is=6a09b8bc&hm=328b95efad362a3b6b521c7464cc416dc8f48fa993f1be18a1aa7ccead5f9fd6&format=webp&quality=lossless&width=382&height=215&"
     },
     {
         "name": "DG Semi Pack",
-        "value": "40m",
+        "price": "40m",
         "image": "https://media.discordapp.net/attachments/1458083379097374804/1493049635923693709/screenshot-2025-12-17-171217-standard.png?ex=6a0b0a14&is=6a09b894&hm=799c3a33c2726723f7b814a8eea71511b056f0f3b1fb020c7d839b5ffdd989c0&format=webp&quality=lossless&width=382&height=216&"
     },
     {
         "name": "Starter Pack",
-        "value": "30m",
+        "price": "30m",
         "image": "https://media.discordapp.net/attachments/1458083379097374804/1493049446378770533/screenshot-2025-12-17-171224-standard.png?ex=6a0b09e7&is=6a09b867&hm=cd6ff07fdebc32869a4c9e241a345adf24bb744e5adb1a2638c942e8ad05bb89&format=webp&quality=lossless&width=382&height=215&"
     }
      ]
