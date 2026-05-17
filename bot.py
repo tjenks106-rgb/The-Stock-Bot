@@ -9,10 +9,11 @@ import os
 
 TOKEN = os.getenv("TOKEN")
 
+GUILD_ID = 1504537814312685640
 STOCK_CHANNEL_ID = 1504575488834670743
+ADMIN_CHANNEL_ID = 1505344381509697740
 
 STOCK_MESSAGE_ID = None
-PANEL_MESSAGE_ID = None
 
 # =========================
 # BOT SETUP
@@ -37,12 +38,11 @@ def load_stock():
             "vehicles": [],
             "tractors": [],
             "harvesters": [],
-            "haulers": [],
+            "trailers": [],
             "plows": [],
             "cultivators": [],
             "seeders": [],
-            "packs": [],
-            "master_list": []
+            "packs": []
         }
 
 def save_stock(data):
@@ -56,47 +56,16 @@ stock = load_stock()
 # =========================
 
 def get_category(item):
+
     mapping = {
-        "vehicles": {
-            "Sled", "Euro Hauler 1280", "Cyber Semi", "Cybertruck",
-            "Train", "DG Semi", "R350 SD", "Kei Pickup",
-            "Marley Pickup", "Titan X", "Titan",
-            "Levi Flatbed", "Foxx Metal Tech P1",
-            "R500", "Solid Hauler 47"
-        },
-        "tractors": {
-            "Sleigh", "Vertra 135", "Vintage Tractor", "KM472",
-            "Claas Xerion 5000", "Fordson", "Rusty Tractor",
-            "Medal Tractor", "SOPT 925", "Foxx Metal Tech X1",
-            "ER80T", "Zalter 500", "ROM2400", "Foxx Chamber 105"
-        },
-        "harvesters": {
-            "NA CR10", "Vintage Harvester", "ActiveS7",
-            "Claas 790", "Mega Baler"
-        },
-        "haulers": {
-            "SL Medium", "Automatic Flatbed",
-            "Insul Animal Trailer", "Small Log Hauler",
-            "Legendary Log Transport", "Large Crop Trailer",
-            "Large Box Trailer", "Vintage Flatbed",
-            "Vintage Log Trailer", "Titan LH", "Titan CH",
-            "Marley Liquid Hauler", "Marley Crop Hauler",
-            "Kei Liquid Hauler", "Kei Crop Hauler",
-            "R1950 Liquid", "DG LT", "DG CT",
-            "Pace IX CH", "Pace IX LT"
-        },
-        "plows": {"ZC3", "NSH", "Maltex P680"},
-        "cultivators": {"Swifter 180", "LAT 360", "WRXL2", "Maltex C4500 Global"},
-        "seeders": {"Pronto9", "EFC 8300 Drill", "ATM 700", "Zalter-S 270", "GFS10"},
-        "packs": {
-            "Truck N' Trailers Pack", "DG Semi Pack",
-            "Vintage Semi Pack", "1950's Truck Pack",
-            "Starter Pack", "Kei Truck Pack",
-            "Marley Truck Pack", "Cyber Pack",
-            "Christmas Vehicle Pack", "Lumber Starter Pack",
-            "Zalter Pack", "Titan Truck Pack",
-            "Insul Pack", "Pace IX Pack"
-        }
+        "vehicles": {"Sled","Sleigh","SL Medium","Euro Hauler 1280","Cyber Semi","Cybertruck","Train","DG Semi","R350 SD","Kei Pickup","Marley Pickup","Titan X","Pace IX CH","Pace IX LT","Titan","Foxx Metal Tech P1","R500"},
+        "tractors": {"Vertra 135","Vintage Tractor","KM472","Claas Xerion 5000","Fordson","Rusty Tractor","Medal Tractor","SOPT 925","Foxx Metal Tech X1","ER80T","Zalter 500"},
+        "harvesters": {"NA CR10","Vintage Harvester","ActiveS7","Claas 790","Mega Baler"},
+        "trailers": {"Insul Animal Trailer","Small Log Hauler","Legendary Log Transport","Levi Flatbed","Large Crop Trailer","Large Box Trailer","Vintage Flatbed","Vintage Log Trailer","Titan LH","Titan CH","Solid Hauler 47","Marley Liquid Hauler","Marley Crop Hauler","Kei Liquid Hauler","Kei Crop Hauler","R1950 Liquid","DG LT","DG CT"},
+        "plows": {"ROM2400","ZC3","WRXL2","GFS10","NSH","Maltex P680"},
+        "cultivators": {"Swifter 180","LAT 360","Foxx Chamber 105","Maltex C4500 Global"},
+        "seeders": {"Pronto9","EFC 8300 Drill","ATM 700","Zalter-S 270"},
+        "packs": {"Truck N' Trailers Pack","DG Semi Pack","Vintage Semi Pack","1950's Truck Pack","Starter Pack","Kei Truck Pack","Marley Truck Pack","Cyber Pack","Christmas Vehicle Pack","Lumber Starter Pack","Zalter Pack","Titan Truck Pack","Insul Pack","Pace IX Pack"}
     }
 
     for cat, items in mapping.items():
@@ -105,21 +74,44 @@ def get_category(item):
     return None
 
 # =========================
+# FORMAT ITEM (NEW)
+# =========================
+
+def format_item(item):
+
+    # supports BOTH old and new formats
+    if isinstance(item, dict):
+        name = item.get("name", "Unknown")
+        price = item.get("price", "")
+        qty = item.get("qty", 1)
+
+        prefix = f"{qty}x " if qty and qty > 1 else ""
+
+        line = f"{prefix}{name}"
+
+        if price:
+            line += f" - {price}"
+
+        return line
+
+    return str(item)
+
+# =========================
 # EMBED
 # =========================
 
 def build_embed():
 
     embed = discord.Embed(
-        title="Current Stock",
-        color=0x2ecc71
+        title="🔥 Current Stock",
+        color=0x39ff14
     )
 
     emoji = {
         "vehicles":"🚗",
         "tractors":"🚜",
         "harvesters":"🌾",
-        "haulers":"🚛",
+        "trailers":"🚛",
         "plows":"🛠️",
         "cultivators":"⚙️",
         "seeders":"🌱",
@@ -128,31 +120,21 @@ def build_embed():
 
     for cat, items in stock.items():
 
-        if cat == "master_list":
-            continue
-
         if not items:
             continue
 
-        lines = []
-
-        for item in items:
-            name = item.get("name")
-            qty = item.get("qty", 1)
-            value = item.get("value", "N/A")
-
-            lines.append(f"{qty}x {name} - {value}")
+        formatted = [format_item(i) for i in items]
 
         embed.add_field(
             name=f"{emoji.get(cat,'📁')} {cat.capitalize()}",
-            value="\n".join(lines),
+            value="\n".join(formatted),
             inline=False
         )
 
     return embed
 
 # =========================
-# UPDATE STOCK
+# UPDATE STOCK MESSAGE
 # =========================
 
 async def update_stock():
@@ -177,52 +159,23 @@ async def update_stock():
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# PANEL SYSTEM FIX
-# =========================
-
-async def send_panel():
-
-    global PANEL_MESSAGE_ID
-
-    channel = bot.get_channel(STOCK_CHANNEL_ID)
-    if not channel:
-        return
-
-    if PANEL_MESSAGE_ID:
-        try:
-            await channel.fetch_message(PANEL_MESSAGE_ID)
-            return
-        except:
-            pass
-
-    msg = await channel.send(
-        "Stock Panel",
-        view=StockPanel()
-    )
-
-    PANEL_MESSAGE_ID = msg.id
-
-# =========================
-# PANEL
+# PANEL (UNCHANGED)
 # =========================
 
 class StockPanel(discord.ui.View):
-
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="Add Stock", style=discord.ButtonStyle.success)
+    @discord.ui.button(label="➕ Add Stock", style=discord.ButtonStyle.success, custom_id="add")
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
-
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("add"),
             ephemeral=True
         )
 
-    @discord.ui.button(label="Remove Stock", style=discord.ButtonStyle.danger)
+    @discord.ui.button(label="➖ Remove Stock", style=discord.ButtonStyle.danger, custom_id="remove")
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
-
         await interaction.response.send_message(
             "Select category:",
             view=CategorySelect("remove"),
@@ -230,25 +183,22 @@ class StockPanel(discord.ui.View):
         )
 
 # =========================
-# CATEGORY SELECT
+# CATEGORY SELECT (UNCHANGED)
 # =========================
 
 class CategorySelect(discord.ui.View):
-
     def __init__(self, action):
         super().__init__(timeout=60)
         self.action = action
 
         options = [
             discord.SelectOption(label=c.capitalize(), value=c)
-            for c in stock.keys()
-            if c != "master_list"
+            for c in ["vehicles","tractors","harvesters","trailers","plows","cultivators","seeders","packs"]
         ]
 
         self.add_item(CategoryDropdown(options, action))
 
 class CategoryDropdown(discord.ui.Select):
-
     def __init__(self, options, action):
         super().__init__(placeholder="Select category", options=options)
         self.action = action
@@ -256,24 +206,17 @@ class CategoryDropdown(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
 
         category = self.values[0]
-        items = stock.get("master_list", [])
 
-        filtered = [
-            i for i in items
-            if get_category(i) == category
-        ]
+        items = stock.get(category, [])
 
-        filtered = filtered[:25]
+        items = items[:25]
 
-        if not filtered:
-            return await interaction.response.send_message(
-                "No items in this category",
-                ephemeral=True
-            )
+        if not items:
+            return await interaction.response.send_message("❌ No items in this category", ephemeral=True)
 
         options = [
-            discord.SelectOption(label=i[:100], value=i[:100])
-            for i in filtered
+            discord.SelectOption(label=str(i)[:100], value=str(i)[:100])
+            for i in items
         ]
 
         await interaction.response.send_message(
@@ -287,13 +230,13 @@ class CategoryDropdown(discord.ui.Select):
 # =========================
 
 class ItemSelect(discord.ui.View):
-
     def __init__(self, options, category, action):
         super().__init__(timeout=60)
+        self.category = category
+        self.action = action
         self.add_item(ItemDropdown(options, category, action))
 
 class ItemDropdown(discord.ui.Select):
-
     def __init__(self, options, category, action):
 
         if len(options) > 25:
@@ -309,34 +252,15 @@ class ItemDropdown(discord.ui.Select):
         item = self.values[0]
         cat = self.category
 
-        category_list = stock[cat]
-
         if self.action == "add":
-
-            for obj in category_list:
-                if obj["name"] == item:
-                    obj["qty"] += 1
-                    break
-            else:
-                category_list.append({
-                    "name": item,
-                    "qty": 1,
-                    "value": "N/A"
-                })
-
+            stock[cat].append({"name": item, "qty": 1})
         else:
-
-            for obj in category_list:
-                if obj["name"] == item:
-                    obj["qty"] -= 1
-                    if obj["qty"] <= 0:
-                        category_list.remove(obj)
-                    break
+            stock[cat] = [i for i in stock[cat] if not (i.get("name") == item if isinstance(i, dict) else i == item)]
 
         save_stock(stock)
         await update_stock()
 
-        await interaction.response.send_message("Updated stock", ephemeral=True)
+        await interaction.response.send_message("✅ Updated stock", ephemeral=True)
 
 # =========================
 # READY EVENT
@@ -344,12 +268,8 @@ class ItemDropdown(discord.ui.Select):
 
 @bot.event
 async def on_ready():
-
     print(f"Logged in as {bot.user}")
-
     await update_stock()
-    await send_panel()
-
     bot.add_view(StockPanel())
 
 # =========================
