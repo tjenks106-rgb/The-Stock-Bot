@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import app_commands
 import json
 import os
 
@@ -19,8 +18,8 @@ if TOKEN is None:
 
 GUILD_ID = 1504537814312685640
 
-STOCK_CHANNEL_ID = 1504575488834670743      # 📦 DISPLAY CHANNEL
-ADMIN_CHANNEL_ID = 1505344381509697740      # 🛠️ MANAGEMENT CHANNEL
+STOCK_CHANNEL_ID = 1504575488834670743
+ADMIN_CHANNEL_ID = 1505344381509697740
 
 STOCK_MESSAGE_ID = None
 ADMIN_MESSAGE_ID = None
@@ -61,7 +60,7 @@ def has_permission(member: discord.Member):
     return any(role.name in ALLOWED_ROLES for role in member.roles)
 
 # =========================
-# EMBED BUILDER (STOCK)
+# EMBED
 # =========================
 
 def build_stock_embed():
@@ -88,11 +87,10 @@ def build_stock_embed():
             inline=False
         )
 
-    embed.set_footer(text="Limited • Premium • Event Vehicles")
     return embed
 
 # =========================
-# STOCK PANEL UPDATE (DISPLAY CHANNEL)
+# STOCK UPDATE
 # =========================
 
 async def send_or_update_stock_panel():
@@ -116,7 +114,7 @@ async def send_or_update_stock_panel():
     STOCK_MESSAGE_ID = msg.id
 
 # =========================
-# ADMIN PANEL UPDATE (MANAGEMENT CHANNEL)
+# ADMIN PANEL UPDATE
 # =========================
 
 async def send_or_update_admin_panel():
@@ -144,18 +142,7 @@ async def send_or_update_admin_panel():
     ADMIN_MESSAGE_ID = msg.id
 
 # =========================
-# SETUP HOOK (SYNC FIX)
-# =========================
-
-@bot.event
-async def setup_hook():
-    guild = discord.Object(id=GUILD_ID)
-    bot.tree.copy_global_to(guild=guild)
-    await bot.tree.sync(guild=guild)
-    print("✅ Slash commands synced")
-
-# =========================
-# READY EVENT
+# READY
 # =========================
 
 @bot.event
@@ -166,7 +153,7 @@ async def on_ready():
     await send_or_update_admin_panel()
 
 # =========================
-# STOCK PANEL BUTTONS
+# BUTTON PANEL
 # =========================
 
 class StockPanel(discord.ui.View):
@@ -177,18 +164,14 @@ class StockPanel(discord.ui.View):
     async def add(self, interaction: discord.Interaction, button: discord.ui.Button):
 
         if interaction.channel.id != ADMIN_CHANNEL_ID:
-            return await interaction.response.send_message(
-                "❌ Use the stock management channel.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ Wrong channel.", ephemeral=True)
 
         if not has_permission(interaction.user):
-            return await interaction.response.send_message(
-                "❌ No permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ No permission.", ephemeral=True)
 
-        await interaction.response.send_message(
+        await interaction.response.defer(ephemeral=True)
+
+        await interaction.followup.send(
             "📂 Select category to ADD:",
             view=CategorySelect(action="add"),
             ephemeral=True
@@ -198,18 +181,14 @@ class StockPanel(discord.ui.View):
     async def remove(self, interaction: discord.Interaction, button: discord.ui.Button):
 
         if interaction.channel.id != ADMIN_CHANNEL_ID:
-            return await interaction.response.send_message(
-                "❌ Use the stock management channel.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ Wrong channel.", ephemeral=True)
 
         if not has_permission(interaction.user):
-            return await interaction.response.send_message(
-                "❌ No permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ No permission.", ephemeral=True)
 
-        await interaction.response.send_message(
+        await interaction.response.defer(ephemeral=True)
+
+        await interaction.followup.send(
             "📂 Select category to REMOVE:",
             view=CategorySelect(action="remove"),
             ephemeral=True
@@ -240,7 +219,9 @@ class CategoryDropdown(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
         category = self.values[0]
 
-        await interaction.response.send_message(
+        await interaction.response.defer(ephemeral=True)
+
+        await interaction.followup.send(
             "🚗 Select vehicle:",
             view=VehicleSelect(category, self.action),
             ephemeral=True
@@ -291,7 +272,7 @@ class VehicleDropdown(discord.ui.Select):
         )
 
 # =========================
-# RUN BOT
+# RUN
 # =========================
 
 bot.run(TOKEN)
