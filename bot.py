@@ -10,7 +10,10 @@ import os
 TOKEN = os.getenv("TOKEN")
 
 STOCK_CHANNEL_ID = 1504575488834670743
+ADMIN_CHANNEL_ID = 1505344381509697740
+
 STOCK_MESSAGE_ID = None
+ADMIN_MESSAGE_ID = None
 
 # =========================
 # BOT SETUP
@@ -109,6 +112,33 @@ async def update_stock():
 
     msg = await channel.send(embed=embed)
     STOCK_MESSAGE_ID = msg.id
+
+# =========================
+# ADMIN PANEL SENDER (NEW)
+# =========================
+
+async def send_admin_panel():
+
+    global ADMIN_MESSAGE_ID
+
+    channel = bot.get_channel(ADMIN_CHANNEL_ID)
+    if not channel:
+        return
+
+    # prevents spam duplicates
+    if ADMIN_MESSAGE_ID:
+        try:
+            await channel.fetch_message(ADMIN_MESSAGE_ID)
+            return
+        except:
+            pass
+
+    msg = await channel.send(
+        "📦 **Stock Management Panel**",
+        view=StockPanel()
+    )
+
+    ADMIN_MESSAGE_ID = msg.id
 
 # =========================
 # PANEL (FIXED)
@@ -214,11 +244,8 @@ class ItemDropdown(discord.ui.Select):
 
         item = self.values[0]
 
-        # ADD STOCK
         if self.action == "add":
             stock[item] = stock.get(item, 0) + 1
-
-        # REMOVE STOCK
         else:
             if item in stock:
                 stock[item] -= 1
@@ -243,8 +270,9 @@ async def on_ready():
 
     await update_stock()
 
-    # REQUIRED for persistent view buttons
     bot.add_view(StockPanel())
+
+    await send_admin_panel()
 
 # =========================
 # RUN
