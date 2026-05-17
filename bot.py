@@ -11,7 +11,8 @@ TOKEN = os.getenv("TOKEN")
 
 STOCK_CHANNEL_ID = 1504575488834670743
 
-STOCK_MESSAGE_ID = 1505344381509697740
+STOCK_MESSAGE_ID = None
+PANEL_MESSAGE_ID = None
 
 # =========================
 # BOT SETUP
@@ -51,7 +52,7 @@ def save_stock(data):
 stock = load_stock()
 
 # =========================
-# CATEGORY MAP (MASTER LIST ONLY)
+# CATEGORY MAP
 # =========================
 
 def get_category(item):
@@ -101,7 +102,6 @@ def get_category(item):
     for cat, items in mapping.items():
         if item in items:
             return cat
-
     return None
 
 # =========================
@@ -127,6 +127,7 @@ def build_embed():
     }
 
     for cat, items in stock.items():
+
         if cat == "master_list":
             continue
 
@@ -139,24 +140,19 @@ def build_embed():
             name = item.get("name")
             qty = item.get("qty", 1)
             value = item.get("value", "N/A")
-            image = item.get("image", "")
 
-            line = f"{qty}x {name} - {value}"
-            if image:
-                line += f"\n{image}"
-
-            lines.append(line)
+            lines.append(f"{qty}x {name} - {value}")
 
         embed.add_field(
             name=f"{emoji.get(cat,'📁')} {cat.capitalize()}",
-            value="\n\n".join(lines),
+            value="\n".join(lines),
             inline=False
         )
 
     return embed
 
 # =========================
-# UPDATE STOCK MESSAGE
+# UPDATE STOCK
 # =========================
 
 async def update_stock():
@@ -179,6 +175,32 @@ async def update_stock():
 
     msg = await channel.send(embed=embed)
     STOCK_MESSAGE_ID = msg.id
+
+# =========================
+# PANEL SYSTEM FIX
+# =========================
+
+async def send_panel():
+
+    global PANEL_MESSAGE_ID
+
+    channel = bot.get_channel(STOCK_CHANNEL_ID)
+    if not channel:
+        return
+
+    if PANEL_MESSAGE_ID:
+        try:
+            await channel.fetch_message(PANEL_MESSAGE_ID)
+            return
+        except:
+            pass
+
+    msg = await channel.send(
+        "Stock Panel",
+        view=StockPanel()
+    )
+
+    PANEL_MESSAGE_ID = msg.id
 
 # =========================
 # PANEL
@@ -234,7 +256,6 @@ class CategoryDropdown(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
 
         category = self.values[0]
-
         items = stock.get("master_list", [])
 
         filtered = [
@@ -290,9 +311,6 @@ class ItemDropdown(discord.ui.Select):
 
         category_list = stock[cat]
 
-        # =========================
-        # ADD STOCK (WITH QUANTITY)
-        # =========================
         if self.action == "add":
 
             for obj in category_list:
@@ -303,13 +321,9 @@ class ItemDropdown(discord.ui.Select):
                 category_list.append({
                     "name": item,
                     "qty": 1,
-                    "value": "N/A",
-                    "image": ""
+                    "value": "N/A"
                 })
 
-        # =========================
-        # REMOVE STOCK
-        # =========================
         else:
 
             for obj in category_list:
@@ -325,13 +339,17 @@ class ItemDropdown(discord.ui.Select):
         await interaction.response.send_message("Updated stock", ephemeral=True)
 
 # =========================
-# READY
+# READY EVENT
 # =========================
 
 @bot.event
 async def on_ready():
+
     print(f"Logged in as {bot.user}")
+
     await update_stock()
+    await send_panel()
+
     bot.add_view(StockPanel())
 
 # =========================
